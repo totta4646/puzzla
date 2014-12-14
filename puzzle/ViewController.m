@@ -51,14 +51,6 @@
                                            repeats:YES];
 
 }
-- (void) drowButton :(UIView*)addView:(UIButton*)drowButton:(float)widthPoint:(float)heightPoint:(float)width:(float)height:(UIColor*)backGroundColor:(UIColor*)textColor:(NSString*)title:(UIColor*)borderColor:(float)borderWidth:(SEL)selector {
-    drowButton = [[UIButton alloc]init];
-    drowButton.frame = CGRectMake(widthPoint, heightPoint, width, height);
-    [drowButton addTarget:self action:selector
-         forControlEvents:UIControlEventTouchDown];
-    drowButton.backgroundColor = backGroundColor;
-    [addView addSubview:drowButton];
-}
 
 //ボタン操作
 -(void)turn:(UIButton*)button{
@@ -97,6 +89,7 @@
 }
 
 
+//描写されているものを消すメソッド
 -(void) removeStageBlock {
     for(UIButton* item in gameView.subviews) {
         [item removeFromSuperview];
@@ -120,6 +113,17 @@
     }
 }
 
+
+//ボタンを描写するメソッド
+- (void) drowButton :(UIView*)addView:(UIButton*)drowButton:(float)widthPoint:(float)heightPoint:(float)width:(float)height:(UIColor*)backGroundColor:(UIColor*)textColor:(NSString*)title:(UIColor*)borderColor:(float)borderWidth:(SEL)selector {
+    drowButton = [[UIButton alloc]init];
+    drowButton.frame = CGRectMake(widthPoint, heightPoint, width, height);
+    [drowButton addTarget:self action:selector
+         forControlEvents:UIControlEventTouchDown];
+    drowButton.backgroundColor = backGroundColor;
+    [addView addSubview:drowButton];
+}
+
 //操作するBlockの描写
 -(void) drowTurnBlock {
     [self removeTurnBlock];
@@ -136,7 +140,34 @@
         [gameView addSubview:cell];
     }
 }
+//stageのブロックの描写
+-(void) drowview {
+    [self removeStageBlock];
+    for(int i = 0; i < STAGE_COL * STAGE_ROW; i++ ){
+        UIButton *cell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
+        cell.backgroundColor = [self checkBlockColor:stageModel.model[i]];
+        cell.tag = i;
+        if (stageModel.model[i] != NONE_BLOCK) {
+            [cell addTarget:self action:@selector(cell:)
+           forControlEvents:UIControlEventTouchDown];
+        }
+        [cell.layer setBorderWidth:1];
+        [cell.layer setBorderColor:[UIColor blackColor].CGColor];
+        [gameView addSubview:cell];
+    }
+}
+//タップした時に現われるpointerの描写
+-(void) drowPoint:(int)point {
+    UILabel *pointcell = [[UILabel alloc]initWithFrame:CGRectMake(point % STAGE_COL * STAGE_CELL,STAGE_CELL + point / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
+    pointcell.tag = 500;
+    pointcell.backgroundColor = [UIColor grayColor];
+    pointcell.layer.cornerRadius = WIDTH/10;
+    [pointcell.layer setBorderWidth:1];
+    [pointcell.layer setBorderColor:[UIColor blackColor].CGColor];
+    [gameView addSubview:pointcell];
+}
 
+//色の判定
 -(UIColor*)checkBlockColor:(NSNumber*)blockStatus {
     if(blockStatus == BLOCK_STARUS) {
         return BLOCK_COLOR;
@@ -153,32 +184,7 @@
     }
 }
 
--(void) drowview {
-    [self removeStageBlock];
-    for(int i = 0; i < STAGE_COL * STAGE_ROW; i++ ){
-        UIButton *cell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
-        cell.backgroundColor = [self checkBlockColor:stageModel.model[i]];
-        cell.tag = i;
-        if (stageModel.model[i] != NONE_BLOCK) {
-        [cell addTarget:self action:@selector(cell:)
-             forControlEvents:UIControlEventTouchDown];
-        }
-        [cell.layer setBorderWidth:1];
-        [cell.layer setBorderColor:[UIColor blackColor].CGColor];
-        [gameView addSubview:cell];
-    }
-}
-
--(void) drowPoint:(int)point {
-    UILabel *pointcell = [[UILabel alloc]initWithFrame:CGRectMake(point % STAGE_COL * STAGE_CELL,STAGE_CELL + point / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
-    pointcell.tag = 500;
-    pointcell.backgroundColor = [UIColor grayColor];
-    pointcell.layer.cornerRadius = WIDTH/10;
-    [pointcell.layer setBorderWidth:1];
-    [pointcell.layer setBorderColor:[UIColor blackColor].CGColor];
-    [gameView addSubview:pointcell];
-}
-
+//タップしたcellのアクション系統
 - (void)cell:(id)sender {
     if(touchCount == 0) {
         firstNum = [sender tag];
@@ -203,7 +209,7 @@
     }
     touchCount++;
 }
-
+//時間でpointerを消すメソッド
 - (void)pointTimeout :(UIButton*)button {
     [self removePointer];
 }

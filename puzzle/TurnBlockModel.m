@@ -20,6 +20,7 @@
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
 
 }
+//起点となるブロックのModelをいれる
 -(void)randomBlock {
     [self resetBlock];
     _model[0] = [NSNumber numberWithInteger:(int)arc4random_uniform(4) + 1];
@@ -27,6 +28,7 @@
     shareData.row = 0;
     shareData.col = 4;
 }
+//Modelのリセット
 -(void) resetBlock {
     _model = [@[] mutableCopy];
     for (int i = 0; i < 4; i++) {
@@ -34,6 +36,7 @@
     }
 }
 
+//モデルの回転
 -(void)turnBlock:(BOOL)reverce:(NSMutableArray*)stageModel{
     if (reverce) {
         [self turn2];
@@ -52,7 +55,7 @@
     }
     [self touchBlock:reverce:stageModel];
 }
-
+//回転動作後のブロックの状態の判定およびブロックのずらし
 -(void)touchBlock:(BOOL)reverce:(NSMutableArray*)stageModel {
     int temp,tempData = -1,tempData2 = -1;
     for (int i = 0 ; i < 4; i++) {
@@ -97,7 +100,7 @@
     }
 }
 
-
+//回転後にそれぞれの方向にぶつかったか
 -(void)bottomCheck:(int)num:(NSMutableArray*)stageModel {
     if((stageModel[num] != NONE_BLOCK) ||
        (stageModel[num] != NONE_BLOCK && stageModel[num - STAGE_COL] == NONE_BLOCK)) {
@@ -144,6 +147,7 @@
         shareData.col--;
     }
 }
+
 //回転
 -(void)turn{
     modelTemp[0] = _model[2];

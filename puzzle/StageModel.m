@@ -29,7 +29,7 @@
         }
     }
 }
-//下に空きがあればつめるメソッド
+//下に空きがあればつめるメソッド -> もしかしたらallmoveが軽かったらそっちで全てやるかも
 -(void)dropFixedBlock:(int)current {
     int temp = current%STAGE_COL+STAGE_COL*STAGE_ROW-STAGE_COL,sum,sum2;
     for (int i = 0 ;i < STAGE_ROW;i++) {
@@ -91,6 +91,7 @@
         }
     }
 }
+//範囲を選択他ものに対してstageModel上のデータを消す
 -(void) deleteBlock:(NSMutableArray*)deleteArray {
     int count = [deleteArray count];
     for (int i = 0; i < count; i++) {
@@ -101,6 +102,9 @@
     }
 }
 
+
+//移動操作系
+//それぞれの方向に対しての制御
 -(BOOL)overBottom:(NSMutableArray*)blockModel {
     for (int i = 0 ; i < 4; i++) {
         if(blockModel[i] != NONE_BLOCK){

@@ -20,4 +20,5 @@
 -(BOOL) overRight:(NSMutableArray*)blockModel;
 -(BOOL) overLeft:(NSMutableArray*)blockModel;
 -(BOOL) clearBlock:(int)first:(int)second;
+-(BOOL) GameOver;
 @end

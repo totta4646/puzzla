@@ -11,18 +11,19 @@
 #import "StageModel.h"
 #import "TurnBlockModel.h"
 #import "AppDelegate.h"
-
+#import "UIColor+Hex.h"
 
 @interface ViewController : UIViewController {
     StageModel *stageModel;
     TurnBlockModel *blockModel;
-    UIView *gameView,*ButtonView;
+    UIView *gameView,*ButtonView,*scoreView,*pauseView;
     UIColor *tempColor;
-    UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce;
+    UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton;
     AppDelegate *shareData;
     NSTimer *autoDown,*timeout;
     float speed;
     int touchCount,firstNum,secondNum;
+    BOOL pause;
 }
 -(void) drowview;
 -(void) removeStageBlock;

@@ -19,6 +19,13 @@
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
+-(BOOL)GameOver {
+    if(_model[14] != NONE_BLOCK || _model[15] != NONE_BLOCK) {
+        return true;
+    }
+    return false;
+}
+
 //turnModelからstageModelへの以降
 -(void) fixingBlock:(NSMutableArray*)blockModel {
     for (int i = 3; i >= 0; i--) {

@@ -18,6 +18,8 @@
 		175F72091A3B22310039B5F3 /* Const.m in Sources */ = {isa = PBXBuildFile; fileRef = 175F72081A3B22310039B5F3 /* Const.m */; };
 		175F72141A3B4C900039B5F3 /* StageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175F72131A3B4C900039B5F3 /* StageModel.m */; };
 		175F72171A3B4CA50039B5F3 /* TurnBlockModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175F72161A3B4CA50039B5F3 /* TurnBlockModel.m */; };
+		177C99821A3DE71F006D1569 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 177C99811A3DE71F006D1569 /* UIColor+Hex.m */; };
+		177C99861A3DF437006D1569 /* 20081.png in Resources */ = {isa = PBXBuildFile; fileRef = 177C99851A3DF437006D1569 /* 20081.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,9 @@
 		175F72131A3B4C900039B5F3 /* StageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageModel.m; sourceTree = "<group>"; };
 		175F72151A3B4CA50039B5F3 /* TurnBlockModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurnBlockModel.h; sourceTree = "<group>"; };
 		175F72161A3B4CA50039B5F3 /* TurnBlockModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TurnBlockModel.m; sourceTree = "<group>"; };
+		177C99801A3DE71F006D1569 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
+		177C99811A3DE71F006D1569 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
+		177C99851A3DF437006D1569 /* 20081.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 20081.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +101,7 @@
 				175F720D1A3B4B6A0039B5F3 /* PazzleView */,
 				175F71E81A3B21E90039B5F3 /* Main.storyboard */,
 				175F71EB1A3B21E90039B5F3 /* Images.xcassets */,
+				177C99841A3DF422006D1569 /* datafile */,
 				175F71ED1A3B21E90039B5F3 /* LaunchScreen.xib */,
 				175F71E21A3B21E90039B5F3 /* puzzle.xcdatamodeld */,
 				175F71DB1A3B21E90039B5F3 /* Supporting Files */,
@@ -145,12 +151,30 @@
 		175F720E1A3B4B8E0039B5F3 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				177C99801A3DE71F006D1569 /* UIColor+Hex.h */,
+				177C99811A3DE71F006D1569 /* UIColor+Hex.m */,
 				175F71DF1A3B21E90039B5F3 /* AppDelegate.h */,
 				175F71E01A3B21E90039B5F3 /* AppDelegate.m */,
 				175F72071A3B22310039B5F3 /* Const.h */,
 				175F72081A3B22310039B5F3 /* Const.m */,
 			);
 			name = Setting;
+			sourceTree = "<group>";
+		};
+		177C99831A3DF40E006D1569 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				177C99851A3DF437006D1569 /* 20081.png */,
+			);
+			name = image;
+			sourceTree = "<group>";
+		};
+		177C99841A3DF422006D1569 /* datafile */ = {
+			isa = PBXGroup;
+			children = (
+				177C99831A3DF40E006D1569 /* image */,
+			);
+			name = datafile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +260,7 @@
 				175F71EA1A3B21E90039B5F3 /* Main.storyboard in Resources */,
 				175F71EF1A3B21E90039B5F3 /* LaunchScreen.xib in Resources */,
 				175F71EC1A3B21E90039B5F3 /* Images.xcassets in Resources */,
+				177C99861A3DF437006D1569 /* 20081.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +283,7 @@
 				175F71E41A3B21E90039B5F3 /* puzzle.xcdatamodeld in Sources */,
 				175F72141A3B4C900039B5F3 /* StageModel.m in Sources */,
 				175F71E71A3B21E90039B5F3 /* ViewController.m in Sources */,
+				177C99821A3DE71F006D1569 /* UIColor+Hex.m in Sources */,
 				175F72091A3B22310039B5F3 /* Const.m in Sources */,
 				175F71DE1A3B21E90039B5F3 /* main.m in Sources */,
 			);
@@ -450,6 +476,7 @@
 				175F72001A3B21E90039B5F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		175F72011A3B21E90039B5F3 /* Build configuration list for PBXNativeTarget "puzzleTests" */ = {
 			isa = XCConfigurationList;
@@ -458,6 +485,7 @@
 				175F72031A3B21E90039B5F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -38,21 +38,8 @@
 
 //モデルの回転
 -(void)turnBlock:(BOOL)reverce:(NSMutableArray*)stageModel{
-    if (reverce) {
-        [self turn2];
-    } else {
         [self turn];
-    }
     _model = [modelTemp mutableCopy];
-    if((_model[0] != NONE_BLOCK || _model[2] != NONE_BLOCK) && shareData.col == -1) {
-        shareData.col++;
-    }
-    if((_model[1] != NONE_BLOCK || _model[3] != NONE_BLOCK) && shareData.col == STAGE_COL-1) {
-        shareData.col--;
-    }
-    if((_model[2] != NONE_BLOCK || _model[3] != NONE_BLOCK) && shareData.row == STAGE_ROW-2) {
-        shareData.row--;
-    }
     [self touchBlock:reverce:stageModel];
 }
 //回転動作後のブロックの状態の判定およびブロックのずらし
@@ -67,36 +54,33 @@
             }
         }
     }
-    if(reverce){
-        if(tempData%2 == tempData2%2 && tempData%2 == 0) {
-            temp = [shareData currentBlock:stageModel:2];
-            //縦
-            [self bottomCheck:temp:stageModel];
-        } else if(tempData%2 != tempData2%2 && tempData/2 == 0) {
-            temp = [shareData currentBlock:stageModel:0];
-            //横上
-            [self leftCheck:temp :stageModel:reverce];
-        } else if(tempData%2 != tempData2%2 && tempData/2 == 1) {
-            temp = [shareData currentBlock:stageModel:3];
-            //横下
-            [self rightCheck:temp :stageModel:reverce];
+    if(tempData%2 == tempData2%2 && tempData%2 == 0) {
+        shareData.row++;
+        temp = [shareData currentBlock:stageModel:2];
+        if (temp > STAGE_COL * STAGE_ROW) {
+            shareData.row--;
+            return;
         }
-    } else {
-        if(tempData%2 == tempData2%2 && tempData%2 == 1) {
-            temp = [shareData currentBlock:stageModel:3];
-            //縦右
-            [self bottomCheck:temp:stageModel];
-            
-        } else if(tempData%2 != tempData2%2 && tempData/2 == 0) {
-            temp = [shareData currentBlock:stageModel:1];
-            //横上
-            [self rightCheck:temp :stageModel:reverce];
-        } else if(tempData%2 != tempData2%2 && tempData/2 == 1) {
-            temp = [shareData currentBlock:stageModel:2];
-            //横下
-            [self leftCheck:temp :stageModel:reverce];
+        [self bottomCheck:temp:stageModel];
+        
+    } else if(tempData%2 == tempData2%2 && tempData%2 == 1) {
+        shareData.row--;
+    } else if(tempData%2 != tempData2%2 && tempData/2 == 0) {
+        shareData.col--;
+        if (shareData.col == -1) {
+            shareData.col++;
         }
-
+        temp = [shareData currentBlock:stageModel:0];
+        //横上
+        [self leftCheck:temp :stageModel:reverce];
+    } else if(tempData%2 != tempData2%2 && tempData/2 == 1) {
+        shareData.col++;
+        if (shareData.col == STAGE_COL - 1) {
+            shareData.col--;
+        }
+        temp = [shareData currentBlock:stageModel:3];
+        //横下
+        [self rightCheck:temp :stageModel:reverce];
     }
 }
 
@@ -112,18 +96,13 @@
     if((stageModel[num] != NONE_BLOCK && shareData.col == STAGE_COL-2) ||
        (stageModel[num+1] != NONE_BLOCK && shareData.col == 0) ||
        (stageModel[num] != NONE_BLOCK && stageModel[num+2] != NONE_BLOCK)) {
-        if(stageModel[num+1] != NONE_BLOCK && shareData.col == 0){
+        if(stageModel[num+1] != NONE_BLOCK && shareData.col == 0) {
             shareData.col--;
         }
-        if (!reverce) {
-            [self turn];
-            [self turn];
-        }
         [self turn];
-        tempNumber = _model[1];
-        _model[1] = _model[3];
-        _model[3] = tempNumber;
-    } else if(stageModel[num] != NONE_BLOCK && stageModel[num + 2] == NONE_BLOCK ){
+        
+    }
+    else if(stageModel[num] != NONE_BLOCK && stageModel[num + 2] == NONE_BLOCK ){
         shareData.col++;
     }
 }
@@ -132,18 +111,13 @@
     if((stageModel[num] != NONE_BLOCK && shareData.col == 0) ||
        (stageModel[num-1] != NONE_BLOCK && shareData.col == STAGE_COL-2) ||
        (stageModel[num] != NONE_BLOCK && stageModel[num-2] != NONE_BLOCK)) {
-        if(stageModel[num-1] != NONE_BLOCK && shareData.col == STAGE_COL-2){
+        if(stageModel[num-1] != NONE_BLOCK && shareData.col == STAGE_COL-2) {
             shareData.col++;
         }
         [self turn];
-        if (!reverce) {
-            [self turn];
-            [self turn];
-        }
-        tempNumber = _model[0];
-        _model[0] = _model[2];
-        _model[2] = tempNumber;
-    } else if(stageModel[num] != NONE_BLOCK && stageModel[num - 2] == NONE_BLOCK ){
+
+    }
+        else if(stageModel[num] != NONE_BLOCK && stageModel[num - 2] == NONE_BLOCK ){
         shareData.col--;
     }
 }
@@ -154,13 +128,6 @@
     modelTemp[1] = _model[0];
     modelTemp[2] = _model[3];
     modelTemp[3] = _model[1];
-    _model = [modelTemp mutableCopy];
-}
--(void)turn2 {
-    modelTemp[0] = _model[1];
-    modelTemp[1] = _model[3];
-    modelTemp[2] = _model[0];
-    modelTemp[3] = _model[2];
     _model = [modelTemp mutableCopy];
 }
 @end

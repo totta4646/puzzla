@@ -27,17 +27,27 @@
 }
 
 //turnModelからstageModelへの以降
--(void) fixingBlock:(NSMutableArray*)blockModel {
+-(NSMutableArray*)fixingBlock:(NSMutableArray*)blockModel {
+    NSMutableArray *temparray;
+    temparray = [@[] mutableCopy];
+    temparray[0] = [NSNumber numberWithInt:-1];
+    int count = 0;
     for (int i = 3; i >= 0; i--) {
         if(blockModel[i] != NONE_BLOCK){
             int temp = [shareData currentBlock:blockModel :i];
             _model[temp] = blockModel[i];
-            [self dropFixedBlock:(int)temp];
+            temparray[count] = [NSNumber numberWithInt:temp];
+            count++;
+            //[self dropFixedBlock:(int)temp];
         }
     }
+    return temparray;
 }
 //下に空きがあればつめるメソッド -> もしかしたらallmoveが軽かったらそっちで全てやるかも
--(void)dropFixedBlock:(int)current {
+-(NSMutableArray*)dropFixedBlock:(int)current {
+    NSMutableArray *temparray;
+    temparray = [@[] mutableCopy];
+    temparray[0] = [NSNumber numberWithInt:-1];
     int temp = current%STAGE_COL+STAGE_COL*STAGE_ROW-STAGE_COL,sum,sum2;
     for (int i = 0 ;i < STAGE_ROW;i++) {
         sum = temp - i*STAGE_COL;
@@ -47,11 +57,14 @@
                 if(_model[sum2] != NONE_BLOCK) {
                     _model[sum] = _model[sum2];
                     _model[sum2] = NONE_BLOCK;
-                    return;
+                    temparray[0] = [NSNumber numberWithInt:sum];
+                    temparray[1] = [NSNumber numberWithInt:sum2];
+                    return temparray;
                 }
             }
         }
     }
+    return temparray;
 }
 //ブロックを消す確認のメソッド
 -(NSMutableArray*) clearBlock:(int)first :(int)second {
@@ -181,7 +194,7 @@
         if(blockModel[i] != NONE_BLOCK){
             int temp =[shareData currentBlock:blockModel :i];
             if(temp >= STAGE_COL * STAGE_ROW -STAGE_COL || _model[temp + STAGE_COL] != NONE_BLOCK){
-                [self fixingBlock:blockModel];
+//                [self fixingBlock:blockModel];
                 return true;
             }
         }

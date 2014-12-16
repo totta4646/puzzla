@@ -20,7 +20,7 @@
     UIColor *tempColor;
     UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton,*stageCell;
     AppDelegate *shareData;
-    NSTimer *autoDown,*timeout;
+    NSTimer *autoDown,*timeout,*longtap;
     float speed;
     int touchCount,firstNum,secondNum,*score;
     BOOL pause;

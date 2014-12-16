@@ -23,6 +23,8 @@
     //model初期化
     pause = false;
     downButton = [[UIButton alloc]init];
+    UILongPressGestureRecognizer *gestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedHandler:)];
+    [downButton addGestureRecognizer:gestureRecognizer];
     leftButton = [[UIButton alloc]init];
     rightButton = [[UIButton alloc]init];
     turnButton = [[UIButton alloc]init];
@@ -156,14 +158,40 @@
 }
 -(void)down:(UIButton*)button{
     if([stageModel overBottom:blockModel.model]) {
+        NSMutableArray *check = [stageModel fixingBlock:blockModel.model];
         [self drowView];
+        if([check[0] intValue] != -1){
+            for (int i = 0; i < 2; i++) {
+                NSMutableArray *check2 = [stageModel dropFixedBlock:[check[i] intValue]];
+                if([check2[0] intValue] != -1) {
+                    [self movingEffect2:([check2[0] intValue]) :[check2[1] intValue]];
+                }
+            }
+        }
         [blockModel randomBlock];
         [self drowTurnBlock];
+        [longtap invalidate];
         return;
     }
     shareData.row++;
     [self drowTurnBlock];
     
+}
+-(void)longPressedHandler:(UILongPressGestureRecognizer *)gestureRecognizer {
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            longtap = [NSTimer scheduledTimerWithTimeInterval:0.05
+                                                       target:self
+                                                     selector:@selector(down:)
+                                                     userInfo:nil
+                                                      repeats:YES];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [longtap invalidate];
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -173,11 +201,13 @@
     for(int i = 0; i < count; i++) {
         for(UIButton* item in gameView.subviews) {
             if(item.tag == [array[i] intValue]) {
-//                [item removeFromSuperview];
+                //付随するアニメーション
                 [UIView animateWithDuration:0.3
                                  animations:^{
                                      item.transform = CGAffineTransformMakeRotation(M_PI);
-                                     item.transform = CGAffineTransformMakeScale(2, 2);}
+                                     item.transform = CGAffineTransformMakeScale(2, 2);
+                                     item.alpha = 0;
+                                 }
                                  completion:^(BOOL finished){
                                      [item removeFromSuperview];
                                      [self drowView];
@@ -242,7 +272,9 @@
         UILabel *cell = [[UILabel alloc]initWithFrame:CGRectMake(STAGE_CELL * (shareData.col + i%2), STAGE_CELL * (shareData.row + i/2 + 2), STAGE_CELL, STAGE_CELL)];
         cell.tag = 200;
         cell.backgroundColor = [self checkBlockColor:blockModel.model[i]];
-        [cell.layer setBorderWidth:1];
+//        [cell.layer setBorderWidth:1];
+        [[cell layer] setCornerRadius:10];
+        [cell setClipsToBounds:YES];
         [cell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
         [gameView addSubview:cell];
     }
@@ -259,13 +291,16 @@
         stageCell.tag = i;
         [stageCell addTarget:self action:@selector(cell:)
             forControlEvents:UIControlEventTouchDown];
-        [stageCell.layer setBorderWidth:1];
+//        [stageCell.layer setBorderWidth:1];
+        [[stageCell layer] setCornerRadius:10];
+        [stageCell setClipsToBounds:YES];
         [stageCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
         [gameView addSubview:stageCell];
     }
 }
 //ステージの元となるセルの描写
 -(void) drowBaseView {
+    return;
     [self removeStageBlock];
     for(int i = STAGE_COL * STAGE_ROW-1; i >= 0; i-- ){
         if(i < STAGE_COL) {
@@ -274,7 +309,7 @@
         UILabel *baseCell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
         baseCell.backgroundColor = BLOCK_COLOR_NONE;
         baseCell.tag = 2000;
-        [baseCell.layer setBorderWidth:1];
+//        [baseCell.layer setBorderWidth:0.5];
         [baseCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
         [gameView addSubview:baseCell];
     }
@@ -401,18 +436,34 @@
     [super didReceiveMemoryWarning];
 }
 
-//移動のメソッド
+//落下のエフェクト消した時
 -(void) movingEffect:(int)movedPosition:(int)currentPosition {
-//    [autoDown invalidate];
     int currentCol = currentPosition%STAGE_COL,
-        currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
-        diffRow = movedPositionRow - currentPositionRow;
+    currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
+    diffRow = movedPositionRow - currentPositionRow;
     UIButton *temp;
     for(UIButton* item in gameView.subviews) {
         if(item.tag == currentPosition) {
             [UIView animateWithDuration:0.5
                              animations:^{item.frame = CGRectMake(currentCol * STAGE_CELL,(currentPositionRow + 1) * STAGE_CELL + diffRow * STAGE_CELL,STAGE_CELL,STAGE_CELL);}
                              completion:^(BOOL finished){}];
+        }
+    }
+}
+//落下のエフェクト設置した時
+-(void) movingEffect2:(int)movedPosition:(int)currentPosition {
+    int currentCol = currentPosition%STAGE_COL,
+    currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
+    diffRow = movedPositionRow - currentPositionRow;
+    UIButton *temp;
+    for(UIButton* item in gameView.subviews) {
+        if(item.tag == currentPosition) {
+            [UIView animateWithDuration:0.3
+                             animations:^{item.frame = CGRectMake(currentCol * STAGE_CELL,(currentPositionRow + 1) * STAGE_CELL + diffRow * STAGE_CELL,STAGE_CELL,STAGE_CELL);}
+                             completion:^(BOOL finished){
+                                 [self drowView];
+                                 [self drowTurnBlock];
+                             }];
         }
     }
 }

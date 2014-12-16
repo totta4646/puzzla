@@ -24,5 +24,7 @@
 -(int) clearBlockSum:(int)first :(int)second;
 -(BOOL) GameOver;
 -(void) deleteBlock:(NSMutableArray*)deleteArray;
+-(NSMutableArray*) fixingBlock:(NSMutableArray*)blockModel;
+-(NSMutableArray*)dropFixedBlock:(int)current;
 -(NSMutableArray*) allmove;
 @end

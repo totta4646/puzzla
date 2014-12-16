@@ -18,13 +18,14 @@
     TurnBlockModel *blockModel;
     UIView *gameView,*ButtonView,*scoreView,*pauseView;
     UIColor *tempColor;
-    UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton;
+    UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton,*stageCell;
     AppDelegate *shareData;
     NSTimer *autoDown,*timeout;
     float speed;
-    int touchCount,firstNum,secondNum;
+    int touchCount,firstNum,secondNum,*score;
     BOOL pause;
 }
+//@property (nonatomic, assign) UIButton *stageCell;
 -(void) drowview;
 -(void) removeStageBlock;
 @end

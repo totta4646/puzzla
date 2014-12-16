@@ -16,6 +16,7 @@
 @end
 
 @implementation ViewController
+//@synthesize stageCell;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,9 +31,11 @@
     pauseView = [[UIView alloc]init];
     resetButton = [[UIButton alloc]init];
     resumeButton = [[UIButton alloc]init];
+    resumeButton.tag = 1001;
     homeButton = [[UIButton alloc]init];
     pauseView.tag = 1000;
     touchCount = 0;
+    score = 0;
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     stageModel = [[StageModel alloc]init];
     [stageModel ModelNew];
@@ -41,7 +44,7 @@
     //パズルをするViewの描写
     gameView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_HEIGHT)];
     [self.view addSubview:gameView];
-    [self drowview];
+    [self drowView];
     scoreView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_CELL * 2)];
     scoreView.backgroundColor = SCORE_COLOR;
     [self.view addSubview:scoreView];
@@ -66,11 +69,13 @@
     [self drowButton:ButtonView :downButton :0 :(HEIGHT-STAGE_HEIGHT)*2/3 :WIDTH :(HEIGHT-STAGE_HEIGHT)/3 :BUTTON_COLOR :BLOCK_COLOR4 :@"↓" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(down:)];
 
     [blockModel randomBlock];
+    [self drowBaseView];
     [self drowTurnBlock];
-
+    
     speed = 1.0;
     [self timerStart];
 }
+
 -(void) timerStart {
     autoDown = [NSTimer scheduledTimerWithTimeInterval:speed
                                                 target:self
@@ -103,7 +108,7 @@
 -(void)resume:(UIButton*)button{
     [self allUnBind];
     for(UIView* item in self.view.subviews) {
-        if(item.tag == 1000) {
+        if(item.tag == 1000 ) {
             [item removeFromSuperview];
         }
     }
@@ -118,7 +123,7 @@
     }
     [stageModel ModelNew];
     [blockModel ModelNew];
-    [self drowview];
+    [self drowView];
     [blockModel randomBlock];
     [self drowTurnBlock];
 
@@ -151,7 +156,7 @@
 }
 -(void)down:(UIButton*)button{
     if([stageModel overBottom:blockModel.model]) {
-        [self drowview];
+        [self drowView];
         [blockModel randomBlock];
         [self drowTurnBlock];
         return;
@@ -163,8 +168,32 @@
 
 
 //描写されているものを消すメソッド
+-(void) removeSelectStageBlock:(NSMutableArray*)array {
+    int count = [array count];
+    for(int i = 0; i < count; i++) {
+        for(UIButton* item in gameView.subviews) {
+            if(item.tag == [array[i] intValue]) {
+//                [item removeFromSuperview];
+                [UIView animateWithDuration:0.3
+                                 animations:^{
+                                     item.transform = CGAffineTransformMakeRotation(M_PI);
+                                     item.transform = CGAffineTransformMakeScale(2, 2);}
+                                 completion:^(BOOL finished){
+                                     [item removeFromSuperview];
+                                     [self drowView];
+                                     [self drowTurnBlock];
+                }];
+
+            }
+        }
+    }
+}
+//描写されているものを消すメソッド
 -(void) removeStageBlock {
     for(UIButton* item in gameView.subviews) {
+        if(item.tag == 2000) {
+            continue;
+        }
         [item removeFromSuperview];
     }
 }
@@ -203,12 +232,10 @@
 -(void) drowTurnBlock {
     [self removeTurnBlock];
     if([stageModel GameOver]) {
-        [autoDown invalidate];
-        [self allBind];
+        [self gameover];
         return;
     }
     for (int i = 0; i < 4; i++ ) {
-        
         if(blockModel.model[i] == NONE_BLOCK) {
             continue;
         }
@@ -221,22 +248,35 @@
     }
 }
 //stageのブロックの描写
--(void) drowview {
+-(void) drowView {
     [self removeStageBlock];
-    for(int i = 0; i < STAGE_COL * STAGE_ROW; i++ ){
+    for(int i = STAGE_COL * STAGE_ROW-1; i >= 0; i-- ){
+        if(stageModel.model[i] == NONE_BLOCK) {
+            continue;
+        }
+        stageCell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
+        stageCell.backgroundColor = [self checkBlockColor:stageModel.model[i]];
+        stageCell.tag = i;
+        [stageCell addTarget:self action:@selector(cell:)
+            forControlEvents:UIControlEventTouchDown];
+        [stageCell.layer setBorderWidth:1];
+        [stageCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
+        [gameView addSubview:stageCell];
+    }
+}
+//ステージの元となるセルの描写
+-(void) drowBaseView {
+    [self removeStageBlock];
+    for(int i = STAGE_COL * STAGE_ROW-1; i >= 0; i-- ){
         if(i < STAGE_COL) {
             continue;
         }
-        UIButton *cell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
-        cell.backgroundColor = [self checkBlockColor:stageModel.model[i]];
-        cell.tag = i;
-        if (stageModel.model[i] != NONE_BLOCK) {
-            [cell addTarget:self action:@selector(cell:)
-           forControlEvents:UIControlEventTouchDown];
-        }
-        [cell.layer setBorderWidth:1];
-        [cell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
-        [gameView addSubview:cell];
+        UILabel *baseCell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
+        baseCell.backgroundColor = BLOCK_COLOR_NONE;
+        baseCell.tag = 2000;
+        [baseCell.layer setBorderWidth:1];
+        [baseCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
+        [gameView addSubview:baseCell];
     }
 }
 //タップした時に現われるpointerの描写
@@ -253,6 +293,15 @@
     [self.view addSubview:pauseView];
     
     [self drowButton:pauseView :resumeButton :STAGE_CELL * 2 :STAGE_CELL * 6 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RESUME" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(resume:)];
+    [self drowButton:pauseView :resetButton :STAGE_CELL * 2 :STAGE_CELL * 8 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RESET" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(reset:)];
+    [self drowButton:pauseView :homeButton :STAGE_CELL * 2 :STAGE_CELL * 10 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"HOME" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(home:)];
+}
+-(void) drowGameOverView {
+    pauseView.frame = CGRectMake(0, 0, WIDTH, HEIGHT);
+    pauseView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
+    [self.view addSubview:pauseView];
+    
+
     [self drowButton:pauseView :resetButton :STAGE_CELL * 2 :STAGE_CELL * 8 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RESET" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(reset:)];
     [self drowButton:pauseView :homeButton :STAGE_CELL * 2 :STAGE_CELL * 10 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"HOME" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(home:)];
 }
@@ -291,11 +340,16 @@
                                                   repeats:NO];
     }
     if(touchCount == 1 && (firstNum != [sender tag])) {
-        secondNum = [sender tag];
         [self drowPoint:[sender tag]];
-        if([stageModel clearBlock:firstNum :secondNum]) {
-            [self drowview];
-            [self drowTurnBlock];
+        secondNum = [sender tag];
+        int tempScore = [stageModel clearBlockSum:firstNum :secondNum];
+        if([stageModel clearBlockCheck:firstNum :secondNum] &&
+            [[stageModel clearBlock:firstNum :secondNum] count] > 3) {
+            //ブロックの移動メソッド
+            [self moveControll:firstNum:secondNum];
+            [self removeSelectStageBlock:[stageModel clearBlock:firstNum :secondNum]];
+            //モデルを消すメソッド
+            [stageModel deleteBlock:[stageModel clearBlock:firstNum :secondNum]];
             [self removePointer];
             return;
         }
@@ -310,9 +364,57 @@
     [self removePointer];
 }
 
+-(void)gameover{
+    [autoDown invalidate];
+    [self allBind];
+    for(UIButton* item in pauseView.subviews) {
+        if(item.tag == 1001) {
+            [item removeFromSuperview];
+        }
+    }
+    [self drowGameOverView];
+}
+//スライドさせるとこ
+-(void) moveControll:(int)first:(int)second {
+    int tempFirstCol = first % STAGE_COL, tempSecondCol = second % STAGE_COL,
+        tempFirstRow = first / STAGE_COL, tempSecondRow = second / STAGE_COL,
+        diffCol = tempFirstCol - tempSecondCol,diffRow = tempFirstRow - tempSecondRow,
+        ii;
+    BOOL change = false;
+    if (first < second) {
+        first = second;
+        change = true;
+    }
+    for(int i = 0; i < abs(diffCol) + 1; i++) {
+        ii = i;
+        if ((diffCol < 0 && change) ||
+            (diffCol > 0 && !change)) {
+            ii = i * -1;
+        }
+        for (int j = 0; 0 < ((first + i) - STAGE_ROW * (abs(diffRow) -1 + j)); j++) {
+            [self movingEffect:first + ii - STAGE_COL * j:first + ii - STAGE_COL * (abs(diffRow) + 1 + j)];
+        }
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+//移動のメソッド
+-(void) movingEffect:(int)movedPosition:(int)currentPosition {
+//    [autoDown invalidate];
+    int currentCol = currentPosition%STAGE_COL,
+        currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
+        diffRow = movedPositionRow - currentPositionRow;
+    UIButton *temp;
+    for(UIButton* item in gameView.subviews) {
+        if(item.tag == currentPosition) {
+            [UIView animateWithDuration:0.5
+                             animations:^{item.frame = CGRectMake(currentCol * STAGE_CELL,(currentPositionRow + 1) * STAGE_CELL + diffRow * STAGE_CELL,STAGE_CELL,STAGE_CELL);}
+                             completion:^(BOOL finished){}];
+        }
+    }
 }
 
 @end

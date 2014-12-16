@@ -19,6 +19,10 @@
 -(BOOL) overBottom:(NSMutableArray*)blockModel;
 -(BOOL) overRight:(NSMutableArray*)blockModel;
 -(BOOL) overLeft:(NSMutableArray*)blockModel;
--(BOOL) clearBlock:(int)first:(int)second;
+-(NSMutableArray*) clearBlock:(int)first:(int)second;
+-(BOOL) clearBlockCheck:(int)first :(int)second;
+-(int) clearBlockSum:(int)first :(int)second;
 -(BOOL) GameOver;
+-(void) deleteBlock:(NSMutableArray*)deleteArray;
+-(NSMutableArray*) allmove;
 @end

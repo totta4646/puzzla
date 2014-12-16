@@ -54,7 +54,7 @@
     }
 }
 //ブロックを消す確認のメソッド
--(BOOL) clearBlock:(int)first :(int)second {
+-(NSMutableArray*) clearBlock:(int)first :(int)second {
     int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
         secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
         tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
@@ -86,15 +86,81 @@
             }
         }
     }
-    [self deleteBlock:tempArray];
+    return tempArray;
+}
+-(BOOL) clearBlockCheck:(int)first :(int)second {
+    int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
+    secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
+    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
+    ii,jj,count = 0;
+    if((tempCol == 0 && abs(tempRow) < 3) ||
+       (tempRow == 0 && abs(tempCol) < 3)) {
+        return false;
+    }
     return true;
 }
-//全部のブロックを移動させる
--(void) allmove {
-    for(int i = STAGE_COL * STAGE_ROW -1 ; i > STAGE_COL; i--) {
+-(int) clearBlockSum:(int)first :(int)second {
+    int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
+    secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
+    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
+    ii,jj,count = 0;
+    NSNumber *tempNumber;
+    if (_model[first] != _model[second]) {
+        return false;
+    } else {
+        tempNumber = _model[first];
+    }
+    for (int i = 0; i <= abs(tempRow); i++) {
+        if (tempRow > 0) {
+            ii = i *(-1);
+        } else {
+            ii = i;
+        }
+        for (int j = 0; j <= abs(tempCol); j++) {
+            if (tempCol > 0) {
+                jj = j *(-1);
+            } else {
+                jj = j;
+            }
+            if(_model[first + ii * STAGE_COL + jj] == tempNumber) {
+                count++;
+            } else {
+                return 0;
+            }
+        }
+    }
+    return count;
+}
+//アニメーション用のメソッド
+-(NSMutableArray*) allmove {
+    int temp,count = 0;
+    NSMutableArray *tempArray;
+    tempArray = [@[] mutableCopy];
+    for(int i = STAGE_COL * STAGE_ROW -1 ; i >  STAGE_COL * STAGE_ROW - (STAGE_COL + 1); i--) {
         if(_model[i] == NONE_BLOCK) {
-            _model[i] = _model[i - STAGE_COL];
-            _model[i - STAGE_COL] = NONE_BLOCK;
+            for (int j = 0; 0 < i - STAGE_COL * j; j++) {
+                if(_model[i-STAGE_COL*j] != NONE_BLOCK) {
+                    tempArray[count] = [NSNumber numberWithInteger:i - STAGE_COL * j];
+                    count++;
+                    tempArray[count] = [NSNumber numberWithInteger:i];
+                    count++;
+                    break;
+                }
+            }
+        }
+    }
+    [self alldown];
+    return tempArray;
+}
+
+//全部のブロックを移動させる
+-(void) alldown {
+    for (int j = 0; j < 9; j++) {
+        for(int i = STAGE_COL * STAGE_ROW -1 ; i > STAGE_COL; i--) {
+            if(_model[i] == NONE_BLOCK) {
+                _model[i] = _model[i - STAGE_COL];
+                _model[i - STAGE_COL] = NONE_BLOCK;
+            }
         }
     }
 }
@@ -104,9 +170,7 @@
     for (int i = 0; i < count; i++) {
         _model[[deleteArray[i] intValue]] = NONE_BLOCK;
     }
-    for (int i = 0; i < 9; i++) {
-     [self allmove];   
-    }
+    [self allmove];
 }
 
 

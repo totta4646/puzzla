@@ -74,11 +74,7 @@
         ii,jj,count = 0;
     NSNumber *tempNumber;
     NSMutableArray *tempArray = [@[] mutableCopy];
-    if (_model[first] != _model[second]) {
-        return false;
-    } else {
-        tempNumber = _model[first];
-    }
+    tempNumber = _model[first];
     for (int i = 0; i <= abs(tempRow); i++) {
         if (tempRow > 0) {
             ii = i *(-1);

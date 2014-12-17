@@ -16,7 +16,6 @@
 @end
 
 @implementation ViewController
-//@synthesize stageCell;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,16 +27,19 @@
     leftButton = [[UIButton alloc]init];
     rightButton = [[UIButton alloc]init];
     turnButton = [[UIButton alloc]init];
-    turnButtonReverce = [[UIButton alloc]init];
     pauseButton = [[UIButton alloc]init];
+    pauseButton.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
     pauseView = [[UIView alloc]init];
     resetButton = [[UIButton alloc]init];
     resumeButton = [[UIButton alloc]init];
     resumeButton.tag = 1001;
     homeButton = [[UIButton alloc]init];
     pauseView.tag = 1000;
-    touchCount = 0;
+    bomb = false;
+    turnCount = 0;
     score = 0;
+    labelCount = 0;
+    clearCount = 0;
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     stageModel = [[StageModel alloc]init];
     [stageModel ModelNew];
@@ -51,12 +53,10 @@
     scoreView.backgroundColor = SCORE_COLOR;
     [self.view addSubview:scoreView];
 
-    UILabel *scoreTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL, WIDTH/3, STAGE_CELL)];
-    scoreTitle.text = @"SCORE:100000";
+    scoreTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL, WIDTH/2, STAGE_CELL)];
     scoreTitle.textAlignment = NSTextAlignmentCenter;
     scoreTitle.textColor = [UIColor whiteColor];
-    [scoreView addSubview:scoreTitle];
-
+    [self reDrowScore:0];
     [self drowButton:scoreView :pauseButton :WIDTH*3/4 :STAGE_CELL :WIDTH/4 : STAGE_CELL :SCORE_COLOR :BLOCK_COLOR :@"PAUSE" :SCORE_COLOR :BUTTON_BORDER_WIDHT :@selector(wait:)];
 
     
@@ -70,19 +70,27 @@
     [self drowButton:ButtonView :downButton :0 :(HEIGHT-STAGE_HEIGHT)*2/3 :WIDTH :(HEIGHT-STAGE_HEIGHT)/3 :BUTTON_COLOR :BLOCK_COLOR4 :@"↓" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(down:)];
 
     [blockModel randomBlock];
-    [self drowBaseView];
     [self drowTurnBlock];
     
-    speed = 0.3;
+    speed = 0.8;
     [self timerStart];
 }
 
--(void) timerStart {
+-(void) timerStart{
     autoDown = [NSTimer scheduledTimerWithTimeInterval:speed
                                                 target:self
                                               selector:@selector(down:)
                                               userInfo:nil
                                                repeats:YES];
+}
+-(void) timerStartItem:(UIButton*)button{
+    if(![autoDown isValid]) {
+        autoDown = [NSTimer scheduledTimerWithTimeInterval:speed
+                                                    target:self
+                                                  selector:@selector(down:)
+                                                  userInfo:nil
+                                                   repeats:YES];
+    }
 }
 -(void)allBind {
     [downButton setEnabled:NO];
@@ -122,6 +130,8 @@
             [item removeFromSuperview];
         }
     }
+    [self reDrowScore:0];
+    score = 0;
     [stageModel ModelNew];
     [blockModel ModelNew];
     [self drowView];
@@ -164,14 +174,26 @@
             }
         }
         [blockModel randomBlock];
+        if(clearCount > 3) {
+            if((int)arc4random_uniform(3) == 0) {
+                if((int)arc4random_uniform(2) == 0) {
+                    blockModel.model[0] = BLOCK_STARUS5;
+                } else {
+                    blockModel.model[0] = BLOCK_STARUS6;
+                }
+            }
+            clearCount = 0;
+        }
         [self drowTurnBlock];
         [longtap invalidate];
+        turnCount = 0;
         return;
     }
     shareData.row++;
     [self drowTurnBlock];
     
 }
+//長押しの判定
 -(void)longPressedHandler:(UILongPressGestureRecognizer *)gestureRecognizer {
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
@@ -192,7 +214,7 @@
 
 //描写されているものを消すメソッド
 -(void) removeSelectStageBlock:(NSMutableArray*)array {
-    int count = [array count];
+    int count = (int)[array count];
     for(int i = 0; i < count; i++) {
         for(UIButton* item in gameView.subviews) {
             if(item.tag == [array[i] intValue]) {
@@ -264,16 +286,33 @@
         if(blockModel.model[i] == NONE_BLOCK) {
             continue;
         }
-        UILabel *cell = [[UILabel alloc]initWithFrame:CGRectMake(STAGE_CELL * (shareData.col + i%2), STAGE_CELL * (shareData.row + i/2 + 2), STAGE_CELL, STAGE_CELL)];
-        cell.tag = 200;
-        cell.backgroundColor = [self checkBlockColor:blockModel.model[i]];
-//        [cell.layer setBorderWidth:1];
-        [[cell layer] setCornerRadius:10];
-        [cell setClipsToBounds:YES];
-        [cell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
-        [gameView addSubview:cell];
+        if(blockModel.model[i] == BLOCK_STARUS5 || blockModel.model[i] == BLOCK_STARUS6) {
+            UIImage *img;
+            if(blockModel.model[i] == BLOCK_STARUS6){
+                img = [UIImage imageNamed:@"Simple-Line-Icons-Set-Vol2-full_07.png"];
+            } else {
+                img = [UIImage imageNamed:@"Simple-Line-Icons-full_03.png"];
+            }
+            UIImageView *cell = [[UIImageView alloc] initWithImage:img];
+            cell.frame = CGRectMake(STAGE_CELL * (shareData.col + i%2), STAGE_CELL * (shareData.row + i/2 + 2), STAGE_CELL, STAGE_CELL);
+            cell.tag = 200;
+            cell.backgroundColor = [self checkBlockColor:blockModel.model[i]];
+            [[cell layer] setCornerRadius:10];
+            [cell setClipsToBounds:YES];
+            [cell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
+            [gameView addSubview:cell];
+        } else {
+            UILabel *cell = [[UILabel alloc]initWithFrame:CGRectMake(STAGE_CELL * (shareData.col + i%2), STAGE_CELL * (shareData.row + i/2 + 2), STAGE_CELL, STAGE_CELL)];
+            cell.tag = 200;
+            cell.backgroundColor = [self checkBlockColor:blockModel.model[i]];
+            [[cell layer] setCornerRadius:10];
+            [cell setClipsToBounds:YES];
+            [cell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
+            [gameView addSubview:cell];
+        }
     }
 }
+
 //stageのブロックの描写
 -(void) drowView {
     [self removeStageBlock];
@@ -283,35 +322,28 @@
         }
         stageCell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
         stageCell.backgroundColor = [self checkBlockColor:stageModel.model[i]];
+        if(stageModel.model[i] == BLOCK_STARUS5) {
+            UIImage *img = [UIImage imageNamed:@"Simple-Line-Icons-full_03.png"];
+            [stageCell setBackgroundImage:img forState:UIControlStateNormal];
+        }
+        if(stageModel.model[i] == BLOCK_STARUS6) {
+            UIImage *img = [UIImage imageNamed:@"Simple-Line-Icons-Set-Vol2-full_07.png"];
+            [stageCell setBackgroundImage:img forState:UIControlStateNormal];
+        }
+
         stageCell.tag = i;
         [stageCell addTarget:self action:@selector(cell:)
             forControlEvents:UIControlEventTouchDown];
-//        [stageCell.layer setBorderWidth:1];
         [[stageCell layer] setCornerRadius:10];
         [stageCell setClipsToBounds:YES];
         [stageCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
         [gameView addSubview:stageCell];
     }
 }
-//ステージの元となるセルの描写
--(void) drowBaseView {
-    return;
-    [self removeStageBlock];
-    for(int i = STAGE_COL * STAGE_ROW-1; i >= 0; i-- ){
-        if(i < STAGE_COL) {
-            continue;
-        }
-        UILabel *baseCell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
-        baseCell.backgroundColor = BLOCK_COLOR_NONE;
-        baseCell.tag = 2000;
-//        [baseCell.layer setBorderWidth:0.5];
-        [baseCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
-        [gameView addSubview:baseCell];
-    }
-}
+
 //タップした時に現われるpointerの描写
 -(void) drowPoint:(int)point {
-    UIImage *img = [UIImage imageNamed:@"20081.png"];
+    UIImage *img = [UIImage imageNamed:@"Simple-Line-Icons-full_03.png"];
     UIImageView *pointcell = [[UIImageView alloc] initWithImage:img];
     pointcell.frame = CGRectMake(point % STAGE_COL * STAGE_CELL,STAGE_CELL + point / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10);
     pointcell.tag = 500;
@@ -340,7 +372,9 @@
 
 //色の判定
 -(UIColor*)checkBlockColor:(NSNumber*)blockStatus {
-    if(blockStatus == BLOCK_STARUS) {
+    if(blockStatus == NONE_BLOCK) {
+        return BLOCK_COLOR_NONE;
+    }else if(blockStatus == BLOCK_STARUS) {
         return BLOCK_COLOR;
     }else if(blockStatus == BLOCK_STARUS2) {
         return BLOCK_COLOR2;
@@ -348,10 +382,8 @@
         return BLOCK_COLOR3;
     }else if(blockStatus == BLOCK_STARUS4) {
         return BLOCK_COLOR4;
-    }else if(blockStatus == BLOCK_STARUS5) {
+    }else {
         return BLOCK_COLOR5;
-    } else {
-        return BLOCK_COLOR_NONE;
     }
 }
 
@@ -360,9 +392,46 @@
     if(pause) {
         return;
     }
+    if(bomb) {
+        bomb = false;
+        int targetBomb = (int)[sender tag];
+        NSMutableArray * tempNumber = [@[] mutableCopy];
+        tempNumber = [self bombcurrent:targetBomb];
+        [stageModel deleteBlock:tempNumber];
+        [self moveControll:[tempNumber[0] intValue]:[tempNumber[(int)[tempNumber count]-1] intValue]];
+        [self removeSelectStageBlock:tempNumber];
+         if(![autoDown isValid]){
+             [self timerStart];
+        }
+        return;
+
+    }
     if(touchCount == 0) {
-        firstNum = [sender tag];
-        [self drowPoint:[sender tag]];
+        firstNum = (int)[sender tag];
+        if(stageModel.model[firstNum] == BLOCK_STARUS5) {
+            NSMutableArray *tempNumber = [@[] mutableCopy];
+            tempNumber[0] = [NSNumber numberWithInteger:firstNum];
+            [stageModel deleteBlock:tempNumber];
+            for(int i = 0; i * STAGE_COL < firstNum; i++) {
+                [self movingEffect2:firstNum - i * STAGE_COL:firstNum - (i + 1) * STAGE_COL];
+            }
+            [self removeSelectStageBlock:tempNumber];
+            [self stoptime];
+            return;
+        }
+        if(stageModel.model[firstNum] == BLOCK_STARUS6) {
+            NSMutableArray *tempNumber = [@[] mutableCopy];
+            tempNumber[0] = [NSNumber numberWithInteger:firstNum];
+            [stageModel deleteBlock:tempNumber];
+            for(int i = 0; i * STAGE_COL < firstNum; i++) {
+                [self movingEffect2:firstNum - i * STAGE_COL:firstNum - (i + 1) * STAGE_COL];
+            }
+            [self removeSelectStageBlock:tempNumber];
+            bomb = true;
+            [autoDown invalidate];
+            return;
+        }
+        [self drowPoint:(int)[sender tag]];
         timeout = [NSTimer scheduledTimerWithTimeInterval:2.0
                                                    target:self
                                                  selector:@selector(pointTimeout:)
@@ -370,11 +439,17 @@
                                                   repeats:NO];
     }
     if(touchCount == 1 && (firstNum != [sender tag])) {
-        [self drowPoint:[sender tag]];
-        secondNum = [sender tag];
+        [self drowPoint:(int)[sender tag]];
+        secondNum = (int)[sender tag];
         int tempScore = [stageModel clearBlockSum:firstNum :secondNum];
         if([stageModel clearBlockCheck:firstNum :secondNum] &&
             [[stageModel clearBlock:firstNum :secondNum] count] > 3) {
+            turnCount++;
+            clearCount++;
+            tempScore = tempScore * turnCount * 100;
+            [self scoreEffect:firstNum:secondNum:tempScore];
+            score = score + tempScore;
+            [self reDrowScore:score];
             //ブロックの移動メソッド
             [self moveControll:firstNum:secondNum];
             [self removeSelectStageBlock:[stageModel clearBlock:firstNum :secondNum]];
@@ -388,6 +463,12 @@
         return;
     }
     touchCount++;
+}
+-(void) reDrowScore:(int)addPoint {
+    NSString *tempScore = [NSString stringWithFormat:@"%d",addPoint];
+    scoreTitle.text = [@"SCORE:" stringByAppendingString:tempScore];
+    scoreTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    [scoreView addSubview:scoreTitle];
 }
 //時間でpointerを消すメソッド
 - (void)pointTimeout :(UIButton*)button {
@@ -403,6 +484,55 @@
         }
     }
     [self drowGameOverView];
+}
+-(NSMutableArray*) bombcurrent:(int)current {
+    NSMutableArray * tempNumber = [@[] mutableCopy];
+    if(current%STAGE_COL == STAGE_COL - 1 &&
+       current/STAGE_COL == STAGE_ROW - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - 1];
+        tempNumber[3] = [NSNumber numberWithInt:current];
+    } else if(current%STAGE_COL == 0 &&
+              current/STAGE_COL == STAGE_ROW - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[2] = [NSNumber numberWithInt:current];
+        tempNumber[3] = [NSNumber numberWithInt:current + 1];
+    } else if(current%STAGE_COL == 0) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[2] = [NSNumber numberWithInt:current];
+        tempNumber[3] = [NSNumber numberWithInt:current + 1];
+        tempNumber[4] = [NSNumber numberWithInt:current + STAGE_COL];
+        tempNumber[5] = [NSNumber numberWithInt:current + STAGE_COL + 1];
+        
+    } else if(current%STAGE_COL == STAGE_COL - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - 1];
+        tempNumber[3] = [NSNumber numberWithInt:current];
+        tempNumber[4] = [NSNumber numberWithInt:current + STAGE_COL - 1];
+        tempNumber[5] = [NSNumber numberWithInt:current + STAGE_COL];
+    } else if(current/STAGE_COL == STAGE_ROW - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[3] = [NSNumber numberWithInt:current - 1];
+        tempNumber[4] = [NSNumber numberWithInt:current];
+        tempNumber[5] = [NSNumber numberWithInt:current + 1];
+    } else {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[3] = [NSNumber numberWithInt:current - 1];
+        tempNumber[4] = [NSNumber numberWithInt:current];
+        tempNumber[5] = [NSNumber numberWithInt:current + 1];
+        tempNumber[6] = [NSNumber numberWithInt:current + STAGE_COL - 1];
+        tempNumber[7] = [NSNumber numberWithInt:current + STAGE_COL];
+        tempNumber[8] = [NSNumber numberWithInt:current + STAGE_COL + 1];
+    }
+    return tempNumber;
 }
 //スライドさせるとこ
 -(void) moveControll:(int)first:(int)second {
@@ -431,17 +561,66 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)stoptime {
+    [autoDown invalidate];
+    timeout = [NSTimer scheduledTimerWithTimeInterval:4
+                                                   target:self
+                                                 selector:@selector(timerStartItem:)
+                                                 userInfo:nil
+                                                  repeats:NO];
+}
+//スコアを表示するメソッド
+-(void) scoreEffect:(int)first:(int)second:(int)scoreData {
+    labelCount++;
+    int tempFirstCol = first % STAGE_COL, tempSecondCol = second % STAGE_COL,
+    tempFirstRow = first / STAGE_COL, tempSecondRow = second / STAGE_COL,
+    diffCol = tempFirstCol - tempSecondCol,diffRow = tempFirstRow - tempSecondRow,tagNumber = 100000 + labelCount;
+    int pointWidth = tempFirstCol * STAGE_CELL ,pointHeight = (tempFirstRow + 1 + (abs(diffRow) + 1)/2) * STAGE_CELL,viewWidth = (abs(diffCol) + 1) * STAGE_CELL,viewHeight = STAGE_CELL;
+    if (tempFirstCol > tempSecondCol) {
+        pointWidth = tempSecondCol * STAGE_CELL;
+    }
+    if (tempFirstRow > tempSecondRow) {
+        pointHeight = (tempSecondRow + 1 + (abs(diffRow) + 1)/2) * STAGE_CELL;
+    }
+    if(viewWidth < STAGE_CELL * 2) {
+        viewWidth = STAGE_CELL * 2;
+        pointWidth = pointWidth - STAGE_CELL/2;
+    }
+    
+    UILabel *scoreAnimation = [[UILabel alloc]initWithFrame:CGRectMake(pointWidth, pointHeight, viewWidth, viewHeight)];
+    
+    scoreAnimation.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:30];
+
+    NSString *Stringscore = [NSString stringWithFormat:@"%d",scoreData];
+    scoreAnimation.text = Stringscore;
+    scoreAnimation.textAlignment = NSTextAlignmentCenter;
+    scoreAnimation.textColor = [UIColor colorWithHex:@"28638f"];
+    scoreAnimation.tag = tagNumber;
+    [self.view addSubview:scoreAnimation];
+    [UIView animateWithDuration:1
+                     animations:^{scoreAnimation.frame = CGRectMake(pointWidth ,pointHeight - STAGE_CELL*2/3, viewWidth, viewHeight);}
+                     completion:^(BOOL finished){
+                         for(UILabel* item in self.view.subviews) {
+                             if(item.tag == tagNumber) {
+                                 labelCount--;
+                                 [item removeFromSuperview];
+                             }
+                         }
+                     }];
+}
+
+
 //落下のエフェクト消した時
 -(void) movingEffect:(int)movedPosition:(int)currentPosition {
     int currentCol = currentPosition%STAGE_COL,
     currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
     diffRow = movedPositionRow - currentPositionRow;
-    UIButton *temp;
     for(UIButton* item in gameView.subviews) {
         if(item.tag == currentPosition) {
-            [UIView animateWithDuration:0.5
+            [UIView animateWithDuration:0.2
                              animations:^{item.frame = CGRectMake(currentCol * STAGE_CELL,(currentPositionRow + 1) * STAGE_CELL + diffRow * STAGE_CELL,STAGE_CELL,STAGE_CELL);}
-                             completion:^(BOOL finished){}];
+                             completion:^(BOOL finished){
+                             }];
         }
     }
 }
@@ -450,7 +629,6 @@
     int currentCol = currentPosition%STAGE_COL,
     currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
     diffRow = movedPositionRow - currentPositionRow;
-    UIButton *temp;
     for(UIButton* item in gameView.subviews) {
         if(item.tag == currentPosition) {
             [UIView animateWithDuration:0.3

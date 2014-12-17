@@ -21,11 +21,11 @@
     UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton,*stageCell;
     AppDelegate *shareData;
     NSTimer *autoDown,*timeout,*longtap;
+    UILabel *scoreTitle;
     float speed;
-    int touchCount,firstNum,secondNum,*score;
-    BOOL pause;
+    int touchCount,firstNum,secondNum,score,turnCount,labelCount,clearCount;
+    BOOL pause,bomb;
 }
-//@property (nonatomic, assign) UIButton *stageCell;
 -(void) drowview;
 -(void) removeStageBlock;
 @end

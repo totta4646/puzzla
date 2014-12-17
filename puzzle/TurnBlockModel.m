@@ -57,7 +57,7 @@
     if(tempData%2 == tempData2%2 && tempData%2 == 0) {
         shareData.row++;
         temp = [shareData currentBlock:stageModel:2];
-        if (temp > STAGE_COL * STAGE_ROW) {
+        if (temp >= STAGE_COL * STAGE_ROW) {
             shareData.row--;
             return;
         }

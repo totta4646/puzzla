@@ -23,6 +23,7 @@
 #define BLOCK_STARUS3 [NSNumber numberWithInteger:3]
 #define BLOCK_STARUS4 [NSNumber numberWithInteger:4]
 #define BLOCK_STARUS5 [NSNumber numberWithInteger:5]
+#define BLOCK_STARUS6 [NSNumber numberWithInteger:6]
 
 #define BLOCK_BORDER_COLOR [UIColor colorWithHex:@"bbe8ff"]
 #define BLOCK_COLOR_NONE [UIColor colorWithHex:@"ffffff"]

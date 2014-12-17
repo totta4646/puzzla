@@ -18,6 +18,9 @@
 		175F72091A3B22310039B5F3 /* Const.m in Sources */ = {isa = PBXBuildFile; fileRef = 175F72081A3B22310039B5F3 /* Const.m */; };
 		175F72141A3B4C900039B5F3 /* StageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175F72131A3B4C900039B5F3 /* StageModel.m */; };
 		175F72171A3B4CA50039B5F3 /* TurnBlockModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 175F72161A3B4CA50039B5F3 /* TurnBlockModel.m */; };
+		177741F41A4175040036EA01 /* target4.png in Resources */ = {isa = PBXBuildFile; fileRef = 177741F31A4175040036EA01 /* target4.png */; };
+		177742001A4178050036EA01 /* Simple-Line-Icons-full_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 177741FF1A4178050036EA01 /* Simple-Line-Icons-full_03.png */; };
+		177742021A41882D0036EA01 /* Simple-Line-Icons-Set-Vol2-full_07.png in Resources */ = {isa = PBXBuildFile; fileRef = 177742011A41882D0036EA01 /* Simple-Line-Icons-Set-Vol2-full_07.png */; };
 		177C99821A3DE71F006D1569 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 177C99811A3DE71F006D1569 /* UIColor+Hex.m */; };
 		177C99861A3DF437006D1569 /* 20081.png in Resources */ = {isa = PBXBuildFile; fileRef = 177C99851A3DF437006D1569 /* 20081.png */; };
 /* End PBXBuildFile section */
@@ -53,6 +56,9 @@
 		175F72131A3B4C900039B5F3 /* StageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StageModel.m; sourceTree = "<group>"; };
 		175F72151A3B4CA50039B5F3 /* TurnBlockModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurnBlockModel.h; sourceTree = "<group>"; };
 		175F72161A3B4CA50039B5F3 /* TurnBlockModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TurnBlockModel.m; sourceTree = "<group>"; };
+		177741F31A4175040036EA01 /* target4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = target4.png; sourceTree = "<group>"; };
+		177741FF1A4178050036EA01 /* Simple-Line-Icons-full_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simple-Line-Icons-full_03.png"; sourceTree = "<group>"; };
+		177742011A41882D0036EA01 /* Simple-Line-Icons-Set-Vol2-full_07.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simple-Line-Icons-Set-Vol2-full_07.png"; sourceTree = "<group>"; };
 		177C99801A3DE71F006D1569 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
 		177C99811A3DE71F006D1569 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		177C99851A3DF437006D1569 /* 20081.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 20081.png; sourceTree = "<group>"; };
@@ -164,7 +170,10 @@
 		177C99831A3DF40E006D1569 /* image */ = {
 			isa = PBXGroup;
 			children = (
+				177741F31A4175040036EA01 /* target4.png */,
+				177742011A41882D0036EA01 /* Simple-Line-Icons-Set-Vol2-full_07.png */,
 				177C99851A3DF437006D1569 /* 20081.png */,
+				177741FF1A4178050036EA01 /* Simple-Line-Icons-full_03.png */,
 			);
 			name = image;
 			sourceTree = "<group>";
@@ -257,10 +266,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				177742001A4178050036EA01 /* Simple-Line-Icons-full_03.png in Resources */,
 				175F71EA1A3B21E90039B5F3 /* Main.storyboard in Resources */,
 				175F71EF1A3B21E90039B5F3 /* LaunchScreen.xib in Resources */,
 				175F71EC1A3B21E90039B5F3 /* Images.xcassets in Resources */,
 				177C99861A3DF437006D1569 /* 20081.png in Resources */,
+				177741F41A4175040036EA01 /* target4.png in Resources */,
+				177742021A41882D0036EA01 /* Simple-Line-Icons-Set-Vol2-full_07.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -31,7 +31,7 @@
     UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton,*stageCell;
     NSTimer *autoDown,*timeout,*longtap;
     UILabel *scoreTitle,*stageLabel;
-    float speed;
+    float speed,currentPointX,currentPointY;
     int touchCount,firstNum,secondNum,turnCount,labelCount,clearCount,speedTempScore,tempDragPoint;
     BOOL pause,bomb,timerOn,DragOn;
     id delegate;

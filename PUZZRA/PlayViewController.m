@@ -83,9 +83,26 @@
                                           initWithTarget:self action:@selector(handlePanGesture:)];
     panGesture.maximumNumberOfTouches = 1;
     [gameView addGestureRecognizer:panGesture];
-
     [blockModel randomBlock];
     [self drowTurnBlock];
+}
+
+/**
+ *  x軸とy軸からモデルのどのブロックかを返すメソッド
+ *
+ *  @param pointX col
+ *  @param pointY row
+ *
+ *  @return current model number
+ */
+-(int) currentPositon:(float)pointX:(float)pointY {
+    int  tempStageCell = (int)STAGE_CELL, currentY = (int)pointY - (tempStageCell * 2),sum,
+    
+    currentRow = currentY / tempStageCell,
+    currentCol = (int)pointX / ((int)self.view.frame.size.width /(int)STAGE_COL);
+    
+    sum = currentCol + currentRow * 10 + 10;
+    return sum;
 }
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
@@ -96,25 +113,23 @@
         DragOn = false;
         return;
     }
+    currentPointX = location.x,currentPointY = location.y;
     DragOn = true;
-    int  tempStageCell = (int)STAGE_CELL, currentY = (int)location.y - (tempStageCell * 2);
-    int currentRow = currentY / tempStageCell,
-    currentCol = (int)location.x / ((int)self.view.frame.size.width /STAGE_COL);
-    tempDragPoint = currentCol + currentRow * 10 + 10;
-    [self hoge:tempDragPoint];
+    tempDragPoint = [self currentPositon:currentPointX :currentPointY];
+    [self drowDragPoint:tempDragPoint];
 }
 - (void)handlePanGesture:(UIPanGestureRecognizer *)sender {
     if (sender.state == UIGestureRecognizerStateEnded){
         CGPoint tapPoint = [sender translationInView:self.view];
-        int deffRow = (int)tapPoint.y / ((int)gameView.frame.size.height /STAGE_ROW-2) ,
-            deffCol = (int)tapPoint.x / ((int)self.view.frame.size.width /STAGE_COL),
-            DragPoint = tempDragPoint + deffCol + deffRow * 10;
+        int movedPositionX = (int)currentPointX + (int)tapPoint.x,
+            movedPositionY = (int)currentPointY + (int)tapPoint.y,
+            DragPoint = [self currentPositon:movedPositionX:movedPositionY];
         if(DragPoint < 0 || DragPoint > STAGE_COL * STAGE_ROW - 1 || !DragOn) {
             [self drowView];
             [self drowTurnBlock];
             return;
         }
-        [self hoge:DragPoint];
+        [self drowDragPoint:DragPoint];
         firstNum = tempDragPoint,secondNum = DragPoint;
         int tempScore = [stageModel clearBlockSum:firstNum :secondNum];
         if([stageModel clearBlockCheck:firstNum :secondNum] &&
@@ -590,7 +605,7 @@
 }
 
 
--(void) hoge:(int)currentPosition {
+-(void) drowDragPoint:(int)currentPosition {
     for(UIButton* item in gameView.subviews) {
         if(item.tag == currentPosition) {
             [UIView animateWithDuration:0.2
@@ -641,33 +656,6 @@
     }
 }
 
-
-//落下のエフェクト設置した時
-//-(void) movingEffect2:(int)movedPosition:(int)currentPosition {
-//    int currentCol = currentPosition%STAGE_COL,
-//    currentPositionRow = currentPosition/STAGE_COL,movedPositionRow = movedPosition/STAGE_COL,
-//    diffRow = movedPositionRow - currentPositionRow;
-//    for(UILabel* item in gameView.subviews) {
-//        if(item.tag == currentPosition) {
-//            [UIView animateWithDuration:0.3
-//                             animations:^{item.frame = CGRectMake(currentCol * STAGE_CELL,(currentPositionRow + 1) * STAGE_CELL + diffRow * STAGE_CELL,STAGE_CELL,STAGE_CELL);}
-//                             completion:^(BOOL finished){
-//                                 [self drowView];
-//                                 [self drowTurnBlock];
-//                             }];
-//        }
-//    }
-//    for(UIButton* item in gameView.subviews) {
-//        if(item.tag == currentPosition) {
-//            [UIView animateWithDuration:0.3
-//                             animations:^{item.frame = CGRectMake(currentCol * STAGE_CELL,(currentPositionRow + 1) * STAGE_CELL + diffRow * STAGE_CELL,STAGE_CELL,STAGE_CELL);}
-//                             completion:^(BOOL finished){
-//                                 [self drowView];
-//                                 [self drowTurnBlock];
-//                             }];
-//        }
-//    }
-//}
 - (void)applicationDidEnterBackground {
     [sound pause];
     [autoDown invalidate];

@@ -22,8 +22,10 @@
         shareDate.madeUser = -1;
     }
     playButton = [UIButton new];
+    anotherplayButton = [UIButton new];
     rankingButton = [UIButton new];
-    [self drowButton:self.view :playButton :STAGE_CELL * 2 :STAGE_CELL * 11 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"PLAY" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(startgame:)];
+    [self drowButton:self.view :playButton :STAGE_CELL * 2 :STAGE_CELL * 10 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"PLAY" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(startgame:)];
+    [self drowButton:self.view :anotherplayButton :STAGE_CELL * 2 :STAGE_CELL * 12 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"ANOTHER" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(anotherstartgame:)];
     [self drowButton:self.view :rankingButton :STAGE_CELL * 2 :STAGE_CELL * 14 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RAKING" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(ranking:)];
     indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     float w = indicator.frame.size.width;
@@ -55,6 +57,12 @@
 
 -(void) startgame :(UIButton*)button{
     PlayViewController *view = [[PlayViewController alloc] init];
+    view.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    view.delegate = self;
+    [self presentModalViewController:view animated:YES];
+}
+-(void) anotherstartgame :(UIButton*)button{
+    AnotherPlayViewController *view = [[AnotherPlayViewController alloc] init];
     view.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     view.delegate = self;
     [self presentModalViewController:view animated:YES];

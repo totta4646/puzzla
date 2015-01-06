@@ -32,7 +32,7 @@
  *  @param add 消した個数
  */
 -(void) addScore:(int)add {
-    tempscore = add * (tempChian + 1) * 100;
+    tempscore = add * (tempChian) * 100;
     score = score + tempscore;
 }
 /**
@@ -57,8 +57,8 @@
  *  @param sendmaxtempscore 得点
  */
 -(void)checkMaxScore:(int)sendmaxtempscore {
-    if(maxscore < sendmaxtempscore * (tempChian + 1) * 100) {
-        maxscore = sendmaxtempscore * (tempChian + 1) * 100;
+    if(maxscore < sendmaxtempscore * (tempChian) * 100) {
+        maxscore = sendmaxtempscore * (tempChian) * 100;
     }
 }
 /**
@@ -73,8 +73,9 @@
 /**
  *  落下までにいくつ消したかの加点
  */
--(void) countMaxChain {
+-(int) countMaxChain {
     tempChian++;
+    return tempChian;
 }
 /**
  *  ブロックが変わった時の処理

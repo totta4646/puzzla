@@ -242,7 +242,15 @@
     [self allmove];
 }
 
+-(void) replaceBlock:(int)current:(int)after {
+    NSNumber *temp = _model[current];
+    _model[current] = _model[after];
+    _model[after] = temp;
+}
 
+-(NSNumber*) checkCurrentBlockStatus:(int)current {
+    return _model[current];
+}
 //移動操作系
 //それぞれの方向に対しての制御
 -(BOOL)overBottom:(NSMutableArray*)blockModel {

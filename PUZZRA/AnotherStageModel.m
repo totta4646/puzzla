@@ -6,43 +6,19 @@
 //  Copyright (c) 2014年 totta. All rights reserved.
 //
 
-#import "StageModel.h"
+#import "AnotherStageModel.h"
 
-@implementation StageModel
+@implementation AnotherStageModel
 //初期設定
--(void) ModelNew {    
+-(void) ModelNew {
     //stageBlock: 11 * 10 = 110マス
     _model = [@[] mutableCopy];
     for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
-        _model[i] = NONE_BLOCK;
+        _model[i] = [NSNumber numberWithInteger:(int)arc4random_uniform(2) + 1];;
     }
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
--(BOOL)GameOver {
-    if(_model[14] != NONE_BLOCK || _model[15] != NONE_BLOCK) {
-        return true;
-    }
-    return false;
-}
-
-//turnModelからstageModelへの以降
--(NSMutableArray*)fixingBlock:(NSMutableArray*)blockModel {
-    NSMutableArray *temparray;
-    temparray = [@[] mutableCopy];
-    temparray[0] = [NSNumber numberWithInt:-1];
-    int count = 0;
-    for (int i = 3; i >= 0; i--) {
-        if(blockModel[i] != NONE_BLOCK){
-            int temp = [shareData currentBlock:blockModel :i];
-            _model[temp] = blockModel[i];
-            temparray[count] = [NSNumber numberWithInt:temp];
-            count++;
-            //[self dropFixedBlock:(int)temp];
-        }
-    }
-    return temparray;
-}
 //下に空きがあればつめるメソッド -> もしかしたらallmoveが軽かったらそっちで全てやるかも
 -(NSMutableArray*)dropFixedBlock:(int)current {
     NSMutableArray *temparray;
@@ -66,15 +42,46 @@
     }
     return temparray;
 }
+
+/**
+ *  左にずらすメソッド
+ */
+-(void)allLeftSlideBlock {
+    BOOL emptyFlag = true;
+    for(int i = STAGE_COL * STAGE_ROW -1 ; i > STAGE_COL * (STAGE_ROW -1) -1; i--) {
+        emptyFlag = true;
+        for (int j = 0; j < 9; j++) {
+            if(_model[i - (j * STAGE_COL)] != NONE_BLOCK) {
+//                NSLog(@"場所は%d",i - (j * STAGE_COL));
+//                NSLog(@"ますの情報は%@",_model[i - (j * STAGE_COL)]);
+                emptyFlag = false;
+                break;
+            }
+        }
+        if(emptyFlag) {
+            int currentPosition =  i % STAGE_COL;
+//            NSLog(@"%d",currentPosition);
+            for (int l = 0; l < STAGE_ROW; l++) {
+                for (int k = currentPosition; k < STAGE_COL -1; k++) {
+                    _model[l * STAGE_COL + k] = _model[l * STAGE_COL + k + 1];
+                }
+                _model[(l + 1) * STAGE_COL -1] = NONE_BLOCK;
+            }
+        }
+    }
+}
 //ブロックを消す確認のメソッド
 -(NSMutableArray*) clearBlock:(int)first :(int)second {
     int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
-        secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
-        tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
-        ii,jj,count = 0;
+    secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
+    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
+    ii,jj,count = 0;
     NSNumber *tempNumber;
     NSMutableArray *tempArray = [@[] mutableCopy];
     tempNumber = _model[first];
+    if(tempNumber == NONE_BLOCK) {
+        return false;
+    }
     for (int i = 0; i <= abs(tempRow); i++) {
         if (tempRow > 0) {
             ii = i *(-1);
@@ -100,10 +107,9 @@
 -(BOOL) clearBlockCheck:(int)first :(int)second {
     int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
     secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
-    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
-    ii,jj,count = 0;
-    if((tempCol == 0 && abs(tempRow) < 3) ||
-       (tempRow == 0 && abs(tempCol) < 3)) {
+    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow;
+    if((tempCol == 0 && abs(tempRow) < 2) ||
+       (tempRow == 0 && abs(tempCol) < 2)) {
         return false;
     }
     return true;
@@ -140,9 +146,67 @@
     }
     return count;
 }
+-(BOOL)stageEmpty {
+    for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
+        if(_model[i] != NONE_BLOCK) {
+            return false;
+        }
+    }
+    return true;
+}
+-(NSMutableArray*) bombCurrent: (int) current {
+    NSMutableArray * tempNumber = [@[] mutableCopy];
+    if(current%STAGE_COL == STAGE_COL - 1 &&
+       current/STAGE_COL == STAGE_ROW - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - 1];
+        tempNumber[3] = [NSNumber numberWithInt:current];
+    } else if(current%STAGE_COL == 0 &&
+              current/STAGE_COL == STAGE_ROW - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[2] = [NSNumber numberWithInt:current];
+        tempNumber[3] = [NSNumber numberWithInt:current + 1];
+    } else if(current%STAGE_COL == 0) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[2] = [NSNumber numberWithInt:current];
+        tempNumber[3] = [NSNumber numberWithInt:current + 1];
+        tempNumber[4] = [NSNumber numberWithInt:current + STAGE_COL];
+        tempNumber[5] = [NSNumber numberWithInt:current + STAGE_COL + 1];
+        
+    } else if(current%STAGE_COL == STAGE_COL - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - 1];
+        tempNumber[3] = [NSNumber numberWithInt:current];
+        tempNumber[4] = [NSNumber numberWithInt:current + STAGE_COL - 1];
+        tempNumber[5] = [NSNumber numberWithInt:current + STAGE_COL];
+    } else if(current/STAGE_COL == STAGE_ROW - 1) {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[3] = [NSNumber numberWithInt:current - 1];
+        tempNumber[4] = [NSNumber numberWithInt:current];
+        tempNumber[5] = [NSNumber numberWithInt:current + 1];
+    } else {
+        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
+        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
+        tempNumber[2] = [NSNumber numberWithInt:current - STAGE_COL + 1];
+        tempNumber[3] = [NSNumber numberWithInt:current - 1];
+        tempNumber[4] = [NSNumber numberWithInt:current];
+        tempNumber[5] = [NSNumber numberWithInt:current + 1];
+        tempNumber[6] = [NSNumber numberWithInt:current + STAGE_COL - 1];
+        tempNumber[7] = [NSNumber numberWithInt:current + STAGE_COL];
+        tempNumber[8] = [NSNumber numberWithInt:current + STAGE_COL + 1];
+    }
+    return tempNumber;
+}
+
 //アニメーション用のメソッド
 -(NSMutableArray*) allmove {
-    int temp,count = 0;
+    int count = 0;
     NSMutableArray *tempArray;
     tempArray = [@[] mutableCopy];
     for(int i = STAGE_COL * STAGE_ROW -1 ; i >  STAGE_COL * STAGE_ROW - (STAGE_COL + 1); i--) {
@@ -175,48 +239,10 @@
 }
 //範囲を選択他ものに対してstageModel上のデータを消す
 -(void) deleteBlock:(NSMutableArray*)deleteArray {
-    int count = [deleteArray count];
+    int count = (int)[deleteArray count];
     for (int i = 0; i < count; i++) {
         _model[[deleteArray[i] intValue]] = NONE_BLOCK;
     }
     [self allmove];
-}
-
-
-//移動操作系
-//それぞれの方向に対しての制御
--(BOOL)overBottom:(NSMutableArray*)blockModel {
-    for (int i = 0 ; i < 4; i++) {
-        if(blockModel[i] != NONE_BLOCK){
-            int temp =[shareData currentBlock:blockModel :i];
-            if(temp >= STAGE_COL * STAGE_ROW -STAGE_COL || _model[temp + STAGE_COL] != NONE_BLOCK){
-//                [self fixingBlock:blockModel];
-                return true;
-            }
-        }
-    }
-    return false;
-}
--(BOOL)overLeft:(NSMutableArray*)blockModel {
-    for (int i = 0 ; i < 4; i++) {
-        if(blockModel[i] != NONE_BLOCK){
-            int temp =[shareData currentBlock:blockModel :i];
-            if(temp%STAGE_COL == 0 || _model[temp - 1] != NONE_BLOCK){
-                return true;
-            }
-        }
-    }
-    return false;
-}
--(BOOL)overRight:(NSMutableArray*)blockModel {
-    for (int i = 0 ; i < 4; i++) {
-        if(blockModel[i] != NONE_BLOCK){
-            int temp =[shareData currentBlock:blockModel :i];
-            if(temp%STAGE_COL == 9 || _model[temp + 1] != NONE_BLOCK){
-                return true;
-            }
-        }
-    }
-    return false;
 }
 @end

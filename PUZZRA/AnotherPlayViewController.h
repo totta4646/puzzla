@@ -7,8 +7,7 @@
 //
 
 #import "Const.h"
-#import "StageModel.h"
-#import "TurnBlockModel.h"
+#import "AnotherStageModel.h"
 #import "AppDelegate.h"
 #import "UIColor+Hex.h"
 #import "SoundPlay.h"
@@ -18,9 +17,8 @@
 #import "Level Balancer.h"
 #import "MyScore.h"
 
-@interface PlayViewController : UIViewController {
-    StageModel *stageModel;
-    TurnBlockModel *blockModel;
+@interface AnotherPlayViewController : UIViewController {
+    AnotherStageModel *stageModel;
     SoundPlay *sound;
     AppDelegate *shareData;
     LobiNetwork *api;
@@ -32,8 +30,8 @@
     NSTimer *autoDown,*timeout,*longtap,*dragPointer;
     UILabel *scoreTitle,*stageLabel;
     float speed,currentPointX,currentPointY;
-    int touchCount,firstNum,secondNum,labelCount,clearCount,speedTempScore,tempDragPoint;
-    BOOL pause,bomb,timerOn,DragOn,turnMode,gameOver;
+    int touchCount,firstNum,secondNum,turnCount,labelCount,clearCount,speedTempScore,tempDragPoint;
+    BOOL pause,bomb,timerOn,DragOn;
     id delegate;
 }
 @property (nonatomic,retain) id delegate;

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		17065F151A48E994004EDA0C /* Level Balancer.m in Sources */ = {isa = PBXBuildFile; fileRef = 17065F141A48E994004EDA0C /* Level Balancer.m */; };
 		170DC3461A4478710028B1EC /* LobiNetwork.m in Sources */ = {isa = PBXBuildFile; fileRef = 170DC3451A4478710028B1EC /* LobiNetwork.m */; };
+		1744D3F01A53C318008CE688 /* AnotherPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1744D3EF1A53C318008CE688 /* AnotherPlayViewController.m */; };
+		1744D3F31A53C32E008CE688 /* AnotherStageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1744D3F21A53C32E008CE688 /* AnotherStageModel.m */; };
 		1781D0E11A519EF100152BE5 /* MyPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1781D0E01A519EF000152BE5 /* MyPageViewController.m */; };
 		179ACDC91A4420B500F6E51F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 179ACDC81A4420B500F6E51F /* main.m */; };
 		179ACDCC1A4420B500F6E51F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 179ACDCB1A4420B500F6E51F /* AppDelegate.m */; };
@@ -50,6 +52,7 @@
 		17C821281A444251009541F8 /* LobiRanking.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 17C821241A444251009541F8 /* LobiRanking.bundle */; };
 		17C821291A444251009541F8 /* LobiCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C821251A444251009541F8 /* LobiCore.framework */; };
 		17C8212A1A444251009541F8 /* LobiRanking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C821261A444251009541F8 /* LobiRanking.framework */; };
+		17F3F9661A5B816E00836D80 /* Simple-Line-Icons-Webfont-600_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 17F3F9651A5B816E00836D80 /* Simple-Line-Icons-Webfont-600_03.png */; };
 		17FB64B11A4CCF9100AC07ED /* MyScore.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FB64B01A4CCF9100AC07ED /* MyScore.m */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +71,10 @@
 		17065F141A48E994004EDA0C /* Level Balancer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Level Balancer.m"; sourceTree = "<group>"; };
 		170DC3441A4478710028B1EC /* LobiNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LobiNetwork.h; sourceTree = "<group>"; };
 		170DC3451A4478710028B1EC /* LobiNetwork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LobiNetwork.m; sourceTree = "<group>"; };
+		1744D3EE1A53C318008CE688 /* AnotherPlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherPlayViewController.h; sourceTree = "<group>"; };
+		1744D3EF1A53C318008CE688 /* AnotherPlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherPlayViewController.m; sourceTree = "<group>"; };
+		1744D3F11A53C32E008CE688 /* AnotherStageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherStageModel.h; sourceTree = "<group>"; };
+		1744D3F21A53C32E008CE688 /* AnotherStageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherStageModel.m; sourceTree = "<group>"; };
 		1781D0DF1A519EF000152BE5 /* MyPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPageViewController.h; sourceTree = "<group>"; };
 		1781D0E01A519EF000152BE5 /* MyPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPageViewController.m; sourceTree = "<group>"; };
 		179ACDC31A4420B500F6E51F /* PUZZRA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PUZZRA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +129,7 @@
 		17C821241A444251009541F8 /* LobiRanking.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LobiRanking.bundle; sourceTree = "<group>"; };
 		17C821251A444251009541F8 /* LobiCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LobiCore.framework; sourceTree = "<group>"; };
 		17C821261A444251009541F8 /* LobiRanking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LobiRanking.framework; sourceTree = "<group>"; };
+		17F3F9651A5B816E00836D80 /* Simple-Line-Icons-Webfont-600_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Simple-Line-Icons-Webfont-600_03.png"; sourceTree = "<group>"; };
 		17FB64AF1A4CCF9100AC07ED /* MyScore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyScore.h; sourceTree = "<group>"; };
 		17FB64B01A4CCF9100AC07ED /* MyScore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyScore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,6 +177,17 @@
 			name = API;
 			sourceTree = "<group>";
 		};
+		1744D3E41A53C17D008CE688 /* AnotherPlauMode */ = {
+			isa = PBXGroup;
+			children = (
+				1744D3EE1A53C318008CE688 /* AnotherPlayViewController.h */,
+				1744D3EF1A53C318008CE688 /* AnotherPlayViewController.m */,
+				1744D3F11A53C32E008CE688 /* AnotherStageModel.h */,
+				1744D3F21A53C32E008CE688 /* AnotherStageModel.m */,
+			);
+			name = AnotherPlauMode;
+			sourceTree = "<group>";
+		};
 		179ACDBA1A4420B500F6E51F = {
 			isa = PBXGroup;
 			children = (
@@ -190,14 +209,15 @@
 		179ACDC51A4420B500F6E51F /* PUZZRA */ = {
 			isa = PBXGroup;
 			children = (
-				179ACDFE1A44216B00F6E51F /* playview */,
+				179ACDFE1A44216B00F6E51F /* NormalPlayMode */,
+				1744D3E41A53C17D008CE688 /* AnotherPlauMode */,
 				170DC3471A4478770028B1EC /* API */,
-				179ACDFF1A44219400F6E51F /* setting */,
+				179ACDFF1A44219400F6E51F /* Setting */,
 				1781D0DF1A519EF000152BE5 /* MyPageViewController.h */,
 				1781D0E01A519EF000152BE5 /* MyPageViewController.m */,
 				179ACDD01A4420B500F6E51F /* ViewController.h */,
 				179ACDD11A4420B500F6E51F /* ViewController.m */,
-				179ACE0B1A4428E400F6E51F /* data */,
+				179ACE0B1A4428E400F6E51F /* Data */,
 				179ACDD31A4420B500F6E51F /* Main.storyboard */,
 				179ACDD61A4420B500F6E51F /* Images.xcassets */,
 				179ACDD81A4420B500F6E51F /* LaunchScreen.xib */,
@@ -234,7 +254,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		179ACDFE1A44216B00F6E51F /* playview */ = {
+		179ACDFE1A44216B00F6E51F /* NormalPlayMode */ = {
 			isa = PBXGroup;
 			children = (
 				17C820F21A443932009541F8 /* PlayViewController.h */,
@@ -248,10 +268,10 @@
 				17FB64AF1A4CCF9100AC07ED /* MyScore.h */,
 				17FB64B01A4CCF9100AC07ED /* MyScore.m */,
 			);
-			name = playview;
+			name = NormalPlayMode;
 			sourceTree = "<group>";
 		};
-		179ACDFF1A44219400F6E51F /* setting */ = {
+		179ACDFF1A44219400F6E51F /* Setting */ = {
 			isa = PBXGroup;
 			children = (
 				179ACDCA1A4420B500F6E51F /* AppDelegate.h */,
@@ -263,16 +283,16 @@
 				179ACDF31A44214A00F6E51F /* UIColor+Hex.h */,
 				179ACDF81A44215600F6E51F /* UIColor+Hex.m */,
 			);
-			name = setting;
+			name = Setting;
 			sourceTree = "<group>";
 		};
-		179ACE0B1A4428E400F6E51F /* data */ = {
+		179ACE0B1A4428E400F6E51F /* Data */ = {
 			isa = PBXGroup;
 			children = (
 				179ACE0D1A4428F200F6E51F /* image */,
 				179ACE0C1A4428ED00F6E51F /* sound */,
 			);
-			name = data;
+			name = Data;
 			sourceTree = "<group>";
 		};
 		179ACE0C1A4428ED00F6E51F /* sound */ = {
@@ -290,6 +310,7 @@
 		179ACE0D1A4428F200F6E51F /* image */ = {
 			isa = PBXGroup;
 			children = (
+				17F3F9651A5B816E00836D80 /* Simple-Line-Icons-Webfont-600_03.png */,
 				179ACE181A44290400F6E51F /* 20081.png */,
 				179ACE191A44290400F6E51F /* Simple-Line-Icons-full_03.png */,
 				179ACE1A1A44290400F6E51F /* Simple-Line-Icons-Set-Vol2-full_07.png */,
@@ -406,6 +427,7 @@
 				179ACE171A4428FB00F6E51F /* status03.mp3 in Resources */,
 				179ACE151A4428FB00F6E51F /* decision4.mp3 in Resources */,
 				179ACE131A4428FB00F6E51F /* bomb1.mp3 in Resources */,
+				17F3F9661A5B816E00836D80 /* Simple-Line-Icons-Webfont-600_03.png in Resources */,
 				179ACE1B1A44290400F6E51F /* 20081.png in Resources */,
 				179ACDD51A4420B500F6E51F /* Main.storyboard in Resources */,
 				179ACE1C1A44290400F6E51F /* Simple-Line-Icons-full_03.png in Resources */,
@@ -436,11 +458,13 @@
 				179ACDF91A44215600F6E51F /* Const.m in Sources */,
 				17FB64B11A4CCF9100AC07ED /* MyScore.m in Sources */,
 				1781D0E11A519EF100152BE5 /* MyPageViewController.m in Sources */,
+				1744D3F31A53C32E008CE688 /* AnotherStageModel.m in Sources */,
 				170DC3461A4478710028B1EC /* LobiNetwork.m in Sources */,
 				17065F151A48E994004EDA0C /* Level Balancer.m in Sources */,
 				179ACDFA1A44215600F6E51F /* SoundPlay.m in Sources */,
 				179ACDCF1A4420B500F6E51F /* PUZZRA.xcdatamodeld in Sources */,
 				179ACDFD1A44215600F6E51F /* UIColor+Hex.m in Sources */,
+				1744D3F01A53C318008CE688 /* AnotherPlayViewController.m in Sources */,
 				179ACDFB1A44215600F6E51F /* StageModel.m in Sources */,
 				179ACDCC1A4420B500F6E51F /* AppDelegate.m in Sources */,
 				179ACDD21A4420B500F6E51F /* ViewController.m in Sources */,

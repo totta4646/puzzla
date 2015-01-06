@@ -22,19 +22,39 @@
 }
 //ランダムでアイテムを入れる
 -(void)randomItem {
-    if((int)arc4random_uniform(2) == 0) {
-        if((int)arc4random_uniform(2) == 0) {
+    int randomItemNumber = (int)arc4random_uniform(2);
+    NSLog(@"%d",randomItemNumber);
+    if(randomItemNumber == 0) {
+        randomItemNumber = (int)arc4random_uniform(3);
+        if(randomItemNumber == 0) {
             _model[0] = BLOCK_STARUS5;
-        } else {
+        } else if(randomItemNumber == 1) {
             _model[0] = BLOCK_STARUS6;
+        } else {
+            _model[0] = BLOCK_STARUS7;
         }
     }
 }
+-(void)randomItem2 {
+    int randomItemNumber = (int)arc4random_uniform(10);
+    if(randomItemNumber == 0) {
+        randomItemNumber = (int)arc4random_uniform(3);
+        if(randomItemNumber == 0) {
+            _model[1] = BLOCK_STARUS5;
+        } else if(randomItemNumber == 1) {
+            _model[1] = BLOCK_STARUS6;
+        } else {
+            _model[1] = BLOCK_STARUS7;
+        }
+    }
+}
+
+
 //起点となるブロックのModelをいれる
 -(void)randomBlock {
     [self resetBlock];
     _model[0] = [NSNumber numberWithInteger:(int)arc4random_uniform(4) + 1];
-//    _model[0] = [NSNumber numberWithInteger:6];
+//    _model[0] = [NSNumber numberWithInteger:7];
     _model[1] = [NSNumber numberWithInteger:(int)arc4random_uniform(4) + 1];
     shareData.row = 0;
     shareData.col = 4;

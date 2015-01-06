@@ -18,7 +18,7 @@
 -(void)useItem;
 -(void)addScore:(int)add;
 -(void)checkMaxScore:(int)sendmaxtempscore;
--(void)countMaxChain;
+-(int)countMaxChain;
 -(void)changeNextBlock;
 -(int)getMaxChainScore;
 -(int)getMaxScore;

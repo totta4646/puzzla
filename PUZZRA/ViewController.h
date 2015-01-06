@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PlayViewController.h"
+#import "AnotherPlayViewController.h"
 #import <LobiCore/LobiAPI.h>
 #import <LobiRanking/LobiRanking.h>
 #import "LobiNetwork.h"
@@ -20,7 +21,7 @@
 
 
 @interface ViewController : UIViewController {
-    UIButton *playButton,*rankingButton;
+    UIButton *playButton,*anotherplayButton,*rankingButton;
     LobiNetwork *api;
     AppDelegate *shareDate;
     UIActivityIndicatorView *indicator;

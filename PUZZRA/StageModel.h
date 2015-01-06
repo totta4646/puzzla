@@ -30,4 +30,7 @@
 -(NSMutableArray*)allmove;
 -(NSMutableArray*)bombCurrent:(int)current;
 -(BOOL)stageEmpty;
+-(void) replaceBlock:(int)current:(int)after;
+-(NSNumber*) checkCurrentBlockStatus:(int)current;
+
 @end

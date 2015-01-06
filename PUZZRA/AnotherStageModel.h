@@ -8,23 +8,23 @@
 
 #import <Foundation/Foundation.h>
 #import "Const.h"
-#import "AppDelegate.h"
 #import "TurnBlockModel.h"
+#import "AppDelegate.h"
 
-@interface StageModel : NSObject {
+@interface AnotherStageModel : NSObject {
+    TurnBlockModel *turnModel;
     AppDelegate *shareData;
 }
 @property NSMutableArray *model;
 -(void) ModelNew;
--(BOOL) overBottom:(NSMutableArray*)blockModel;
--(BOOL) overRight:(NSMutableArray*)blockModel;
--(BOOL) overLeft:(NSMutableArray*)blockModel;
+-(void) randomModelAdd;
+-(void) allLeftSlideBlock;
 -(NSMutableArray*) clearBlock:(int)first:(int)second;
 -(BOOL) clearBlockCheck:(int)first :(int)second;
 -(int) clearBlockSum:(int)first :(int)second;
--(BOOL) GameOver;
 -(void) deleteBlock:(NSMutableArray*)deleteArray;
--(NSMutableArray*) fixingBlock:(NSMutableArray*)blockModel;
 -(NSMutableArray*)dropFixedBlock:(int)current;
--(NSMutableArray*) allmove;
+-(NSMutableArray*)allmove;
+-(NSMutableArray*)bombCurrent:(int)current;
+-(BOOL)stageEmpty;
 @end

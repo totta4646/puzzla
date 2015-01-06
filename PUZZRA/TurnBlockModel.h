@@ -21,5 +21,6 @@
 -(void)randomBlock;
 -(void)turnBlock:(BOOL)reverce:(NSMutableArray*)stageModel;
 -(void)randomItem;
+-(void)randomItem2;
 -(int)currentBlock:(NSMutableArray*)blockModel:(int)i;
 @end

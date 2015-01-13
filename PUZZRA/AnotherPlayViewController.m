@@ -328,6 +328,7 @@
             [item removeFromSuperview];
         }
     }
+    [mTimer invalidate];
     [self drowGameOverView];
 }
 

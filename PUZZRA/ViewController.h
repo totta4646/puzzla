@@ -14,6 +14,7 @@
 #import "LobiNetwork.h"
 #import "MyPageViewController.h"
 #import "AppDelegate.h"
+#import "SoundPlay.h"
 
 @protocol modalViewDelegate <NSObject>
 -(void) modalViewWillClose;
@@ -21,10 +22,13 @@
 
 
 @interface ViewController : UIViewController {
-    UIButton *playButton,*anotherplayButton,*rankingButton;
+    UIButton *playButton,*anotherplayButton,*rankingButton,*musicButton;
     LobiNetwork *api;
-    AppDelegate *shareDate;
+    AppDelegate *ShareData;
     UIActivityIndicatorView *indicator;
+    SoundPlay *sound;
+    BOOL music;
+    UIImage *onMusic,*noneMusic;
 }
 @end
 

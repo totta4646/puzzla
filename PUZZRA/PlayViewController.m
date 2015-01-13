@@ -29,6 +29,7 @@
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     pause = false;
     sound = [[SoundPlay alloc]init];
+    [sound bgm3];
     downButton = [[UIButton alloc]init];
     UILongPressGestureRecognizer *gestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedHandler:)];
     [downButton addGestureRecognizer:gestureRecognizer];
@@ -68,6 +69,7 @@
     scoreTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL, WIDTH/2, STAGE_CELL)];
     scoreTitle.textAlignment = NSTextAlignmentCenter;
     scoreTitle.textColor = [UIColor whiteColor];
+    [scoreView addSubview:scoreTitle];
     [self reDrowScore:0];
     [self drowButton:scoreView :pauseButton :WIDTH*3/4 :STAGE_CELL :WIDTH/4 : STAGE_CELL :SCORE_COLOR :BLOCK_COLOR :@"PAUSE" :SCORE_COLOR :BUTTON_BORDER_WIDHT :@selector(wait:)];
     
@@ -98,11 +100,12 @@
  */
 -(int) currentPositon:(float)pointX:(float)pointY {
     int  tempStageCell = (int)STAGE_CELL, currentY = (int)pointY - (tempStageCell * 2),sum,
-    
     currentRow = currentY / tempStageCell,
     currentCol = (int)pointX / ((int)self.view.frame.size.width /(int)STAGE_COL);
-    
     sum = currentCol + currentRow * 10 + 10;
+    if (currentCol == 10) {
+        return sum - 1;
+    }
     return sum;
 }
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -164,7 +167,7 @@
             [self changeEffect:secondNum:firstNum];
         }
         if([stageModel clearBlockCheck:firstNum :secondNum] &&
-           [[stageModel clearBlock:firstNum :secondNum] count] > 3) {
+           [[stageModel clearBlock:firstNum :secondNum] count] > 2) {
             clearCount++;
             
             int ChainSum = [score countMaxChain];
@@ -207,6 +210,7 @@
 -(void) timerStartItem:(UIButton*)button{
     timerOn = false;
     turnMode = false;
+    [sound bgm3];
     if(![autoDown isValid]) {
         autoDown = [NSTimer scheduledTimerWithTimeInterval:speed
                                                     target:self
@@ -280,6 +284,7 @@
     [self timerStart];
 }
 -(void)home:(UIButton*)button {
+    [sound stopbgm];
     [delegate modalViewWillClose];
 }
 -(void)turn:(UIButton*)button{
@@ -485,7 +490,6 @@
     [self.view addSubview:pauseView];
     [api sendScore:[score getScore]];
     [api sendMaxChainScore:[score getMaxChainScore]];
-    [api sendMaxScore:[score getMaxScore]];
     UILabel *currentScore = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL*3, WIDTH, STAGE_CELL*6)];
     NSString *tempScore = [NSString stringWithFormat:@"%d",[score getScore]];
     currentScore.text = [@"SCORE:" stringByAppendingString:tempScore];
@@ -516,16 +520,15 @@
         return BLOCK_COLOR5;
     }
 }
--(UIColor*)checkScoreLabel:(int)chain {
-    if(chain == 1) {
-        return [UIColor colorWithHex:@"28638f"];
-    }else if(chain == 2) {
+-(UIColor*)checkScoreLabel:(int)current {
+    NSNumber *currentStatus = [stageModel checkCurrentBlockStatus:current];
+    if(currentStatus == BLOCK_STARUS) {
         return BLOCK_COLOR;
-    }else if(chain == 3) {
+    }else if(currentStatus == BLOCK_STARUS2) {
         return BLOCK_COLOR2;
-    }else if(chain == 4) {
+    }else if(currentStatus == BLOCK_STARUS3) {
         return BLOCK_COLOR3;
-    }else if(chain == 5) {
+    }else if(currentStatus == BLOCK_STARUS4) {
         return BLOCK_COLOR4;
     }else {
         return BLOCK_COLOR5;
@@ -550,6 +553,7 @@
         }
         [self removeEffectSelectBlock:tempNumber];
         [sound timer];
+        [sound timerbgm];
         [self stoptime];
         return;
     }
@@ -577,8 +581,8 @@
         }
         [self removeEffectSelectBlock:tempNumber];
         [sound timer];
+        [sound timerbgm];
         [self stoptime];
-        
         return;
     }
 }
@@ -594,7 +598,6 @@
     NSString *tempScore = [NSString stringWithFormat:@"%d",addPoint];
     scoreTitle.text = [@"SCORE:" stringByAppendingString:tempScore];
     scoreTitle.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
-    [scoreView addSubview:scoreTitle];
 }
 
 
@@ -668,7 +671,7 @@
     NSString *Stringscore = [NSString stringWithFormat:@"%d",[score getcurrentaddscore]];
     scoreAnimation.text = Stringscore;
     scoreAnimation.textAlignment = NSTextAlignmentCenter;
-    UIColor *scoreLabelColor = [self checkScoreLabel:chain];
+    UIColor *scoreLabelColor = [self checkScoreLabel:first];
     scoreAnimation.textColor = scoreLabelColor;
     scoreAnimation.tag = tagNumber;
     [self.view addSubview:scoreAnimation];

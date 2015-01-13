@@ -27,12 +27,13 @@
     UIView *gameView,*ButtonView,*scoreView,*pauseView;
     UIColor *tempColor;
     UIButton *leftButton,*rightButton,*downButton,*turnButton,*turnButtonReverce,*pauseButton,*resetButton,*resumeButton,*homeButton,*stageCell;
-    NSTimer *autoDown,*timeout,*longtap,*dragPointer;
+    NSTimer *mTimer,*longtap,*dragPointer;
     UILabel *scoreTitle,*stageLabel;
     float speed,currentPointX,currentPointY;
-    int touchCount,firstNum,secondNum,turnCount,labelCount,clearCount,speedTempScore,tempDragPoint;
+    int touchCount,firstNum,secondNum,turnCount,labelCount,clearCount,speedTempScore,tempDragPoint,tempscore;
     BOOL pause,bomb,timerOn,DragOn;
     id delegate;
+    NSTimeInterval startTime;
 }
 @property (nonatomic,retain) id delegate;
 -(void) drowview;

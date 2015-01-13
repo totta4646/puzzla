@@ -8,14 +8,23 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
+#import "AppDelegate.h"
 
-@interface SoundPlay : NSObject
+@interface SoundPlay : NSObject {
+    AppDelegate *ShareData;
+}
 @property NSString *bgmpath;
 @property NSURL *bgmurl;
-@property AVAudioPlayer *sound,*sound2;
+@property AVAudioPlayer *sound,*sound2,*sound3,*sound4;
 -(void)bomb;
 -(void)timer;
 -(void)fixed;
 -(void)pause;
 -(void)clearBlock;
+-(void)bgm;
+-(void)bgm2;
+-(void)bgm3;
+-(void)timerbgm;
+-(void)stopbgm;
+-(void)soundNew;
 @end

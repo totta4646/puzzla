@@ -58,7 +58,7 @@
     [maxscore addTarget:self action:@selector(maxscore:)
        forControlEvents:UIControlEventTouchDown];
     maxscore.backgroundColor = BLOCK_COLOR3;
-    [maxscore setTitle:@"瞬間最大スコア" forState:UIControlStateNormal];
+    [maxscore setTitle:@"Another" forState:UIControlStateNormal];
     maxscore.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
     [maxscore setTitleColor:[UIColor colorWithHex:@"fff"] forState:UIControlStateNormal];
     
@@ -102,13 +102,19 @@
     [self drowhiscoreRanking];
 }
 -(void) hiScore :(UIButton*) button {
-    [myPage bringSubviewToFront:hiscoreranking];
+    hiscoreranking.alpha = 1;
+    maxscoreranking.alpha = 0;
+    maxchainranking.alpha = 0;
 }
 -(void) maxchain :(UIButton*) button {
-    [myPage bringSubviewToFront:maxchainranking];
+    hiscoreranking.alpha = 0;
+    maxscoreranking.alpha = 0;
+    maxchainranking.alpha = 1;
 }
 -(void) maxscore :(UIButton*) button {
-    [myPage bringSubviewToFront:maxscoreranking];
+    hiscoreranking.alpha = 0;
+    maxscoreranking.alpha = 1;
+    maxchainranking.alpha = 0;
 }
 - (void) drowMaxChainRanking {
     LobiNetworkResponse *resdata = [api maxchaindata];
@@ -270,7 +276,15 @@
         [rankingView addSubview:username];
         
         UILabel *score = [[UILabel alloc]initWithFrame:CGRectMake(STAGE_CELL * 4.2,STAGE_CELL*2.2/2,STAGE_CELL * 5,STAGE_CELL)];
-        score.text = [hiscoredata objectForKey:@"score"];
+        NSString *stemptime = [hiscoredata objectForKey:@"score"];
+        int itemptime = [stemptime intValue],
+        itempminutes = itemptime/100,
+        itempseconds = itemptime%100;
+        
+        NSString *stempminutes = [NSString stringWithFormat:@"%02d",itempminutes],
+        *stempseconds = [NSString stringWithFormat:@"%02d",itempseconds],
+        *temptime = [stempminutes stringByAppendingString:@":"];
+        score.text = [temptime stringByAppendingString:stempseconds];
         score.textAlignment = NSTextAlignmentCenter;
         score.font = [UIFont fontWithName:@"AppleGothic" size:30];
         score.textColor = [UIColor whiteColor];

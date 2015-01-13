@@ -104,8 +104,8 @@
     int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
     secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
     tempCol = firstCol - secondCol,tempRow = firstRow - secondRow;
-    if((tempCol == 0 && abs(tempRow) < 3) ||
-       (tempRow == 0 && abs(tempCol) < 3)) {
+    if((tempCol == 0 && abs(tempRow) < 2) ||
+       (tempRow == 0 && abs(tempCol) < 2)) {
         return false;
     }
     return true;

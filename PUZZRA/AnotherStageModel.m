@@ -14,8 +14,13 @@
     //stageBlock: 11 * 10 = 110マス
     _model = [@[] mutableCopy];
     for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
-        _model[i] = [NSNumber numberWithInteger:(int)arc4random_uniform(2) + 1];;
+        _model[i] = [NSNumber numberWithInteger:(int)arc4random_uniform(2) + 1];
+//        _model[i] = NONE_BLOCK;
     }
+//    _model[102] = [NSNumber numberWithInteger:1];
+//    _model[103] = [NSNumber numberWithInteger:1];
+//    _model[104] = [NSNumber numberWithInteger:1];
+//    _model[105] = [NSNumber numberWithInteger:1];
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
@@ -244,5 +249,14 @@
         _model[[deleteArray[i] intValue]] = NONE_BLOCK;
     }
     [self allmove];
+}
+-(BOOL) gameover {
+    for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
+        if(_model[i] != NONE_BLOCK) {
+            return false;
+        }
+    }
+    NSLog(@"aaa");
+    return true;
 }
 @end

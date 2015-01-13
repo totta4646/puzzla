@@ -27,4 +27,5 @@
 -(NSMutableArray*)allmove;
 -(NSMutableArray*)bombCurrent:(int)current;
 -(BOOL)stageEmpty;
+-(BOOL)gameover;
 @end

@@ -16,7 +16,6 @@
 @synthesize row;
 @synthesize col;
 @synthesize madeUser;
-@synthesize music;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [LobiCore setupClientId:@"c1a1d1344293caabe36b5ee226001abf4677c613" accountBaseName:@"player"];

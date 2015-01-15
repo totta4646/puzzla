@@ -55,18 +55,12 @@
 
 
 -(void)soundPlay {
-    if(ShareData.music == 1) {
-        return;
-    }
     _bgmurl = [NSURL fileURLWithPath:_bgmpath];
     _sound = [[AVAudioPlayer alloc]initWithContentsOfURL:_bgmurl error:nil];
     _sound.currentTime = 0;
     [_sound play];
 }
 -(void)soundPlay2 {
-    if(ShareData.music == 1) {
-        return;
-    }
     _bgmurl = [NSURL fileURLWithPath:_bgmpath];
     _sound2 = [[AVAudioPlayer alloc]initWithContentsOfURL:_bgmurl error:nil];
     _sound2.numberOfLoops = -1;

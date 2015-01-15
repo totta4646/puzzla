@@ -256,7 +256,6 @@
             return false;
         }
     }
-    NSLog(@"aaa");
     return true;
 }
 @end

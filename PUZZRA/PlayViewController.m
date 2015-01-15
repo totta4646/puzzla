@@ -397,11 +397,11 @@
         if(blockModel.model[i] == BLOCK_STARUS5 || blockModel.model[i] == BLOCK_STARUS6 || blockModel.model[i] == BLOCK_STARUS7) {
             UIImage *img;
             if(blockModel.model[i] == BLOCK_STARUS5){
-                img = [UIImage imageNamed:@"Simple-Line-Icons-full_03.png"];
+                img = [UIImage imageNamed:@"time.png"];
             } else if(blockModel.model[i] == BLOCK_STARUS6) {
-                img = [UIImage imageNamed:@"Simple-Line-Icons-Set-Vol2-full_07.png"];
+                img = [UIImage imageNamed:@"bomb.png"];
             } else {
-                img = [UIImage imageNamed:@"Simple-Line-Icons-Webfont-600_03.png"];
+                img = [UIImage imageNamed:@"change.png"];
             }
             UIImageView *cell = [[UIImageView alloc] initWithImage:img];
             cell.frame = CGRectMake(STAGE_CELL * (shareData.col + i%2), STAGE_CELL * (shareData.row + i/2 + 2), STAGE_CELL, STAGE_CELL);
@@ -433,7 +433,7 @@
         stageCell = [[UIButton alloc]initWithFrame:CGRectMake(i % STAGE_COL * STAGE_CELL,STAGE_CELL + i / STAGE_COL * STAGE_CELL, STAGE_CELL, WIDTH/10)];
         stageCell.backgroundColor = [self checkBlockColor:stageModel.model[i]];
         if(stageModel.model[i] == BLOCK_STARUS5) {
-            UIImage *img = [UIImage imageNamed:@"Simple-Line-Icons-full_03.png"];
+            UIImage *img = [UIImage imageNamed:@"time.png"];
             [stageCell setBackgroundImage:img forState:UIControlStateNormal];
             stageCell.tag = i;
             [stageCell addTarget:self action:@selector(cell:)
@@ -443,7 +443,7 @@
             [stageCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
             [gameView addSubview:stageCell];
         } else if (stageModel.model[i] == BLOCK_STARUS6) {
-            UIImage *img = [UIImage imageNamed:@"Simple-Line-Icons-Set-Vol2-full_07.png"];
+            UIImage *img = [UIImage imageNamed:@"bomb.png"];
             [stageCell setBackgroundImage:img forState:UIControlStateNormal];
             stageCell.tag = i;
             [stageCell addTarget:self action:@selector(cell:)
@@ -453,7 +453,7 @@
             [stageCell.layer setBorderColor:BLOCK_BORDER_COLOR.CGColor];
             [gameView addSubview:stageCell];
         } else if (stageModel.model[i] == BLOCK_STARUS7) {
-            UIImage *img = [UIImage imageNamed:@"Simple-Line-Icons-Webfont-600_03.png"];
+            UIImage *img = [UIImage imageNamed:@"change.png"];
             [stageCell setBackgroundImage:img forState:UIControlStateNormal];
             stageCell.tag = i;
             [stageCell addTarget:self action:@selector(cell:)

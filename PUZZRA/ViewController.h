@@ -22,13 +22,13 @@
 
 
 @interface ViewController : UIViewController {
-    UIButton *playButton,*anotherplayButton,*rankingButton,*musicButton;
+    UIButton *playButton,*anotherplayButton,*rankingButton,*helpButton,*helpButton2;
     LobiNetwork *api;
     AppDelegate *ShareData;
     UIActivityIndicatorView *indicator;
     SoundPlay *sound;
-    BOOL music;
-    UIImage *onMusic,*noneMusic;
+    UIImage *help,*helpViewimage,*helpViewimage2;
+    BOOL helpStatus;
 }
 @end
 

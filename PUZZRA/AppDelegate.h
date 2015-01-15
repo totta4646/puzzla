@@ -21,7 +21,6 @@
 @property (nonatomic, assign) int row;
 @property (nonatomic, assign) int col;
 @property (nonatomic, assign) int madeUser;
-@property (nonatomic, assign) int music;
 
 -(int) currentBlock:(NSMutableArray*)blockModel:(int)i;
 - (void)saveContext;

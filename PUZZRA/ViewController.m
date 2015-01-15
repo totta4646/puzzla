@@ -16,10 +16,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    ShareData.music = 0;
     sound = [SoundPlay new];
+    helpViewimage = [UIImage imageNamed:@"puzzra_help.png"];
+    helpViewimage2 = [UIImage imageNamed:@"puzzra_help2.png"];
+    help = [UIImage imageNamed:@"help.png"];
+    helpStatus = false;
+    
     [sound bgm];
-    music = true;
     api = [[LobiNetwork alloc]init];
     if(![api signUp]) {
         [self alert];
@@ -28,11 +31,17 @@
     playButton = [UIButton new];
     anotherplayButton = [UIButton new];
     rankingButton = [UIButton new];
-    musicButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
-    [musicButton setBackgroundImage:onMusic forState:UIControlStateNormal];
-    [musicButton addTarget:self action:@selector(music:)
+    helpButton = [[UIButton alloc]initWithFrame:CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 10.3, 60, 25)];
+    [helpButton setBackgroundImage:help forState:UIControlStateNormal];
+    [helpButton addTarget:self action:@selector(help:)
         forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:musicButton];
+    [self.view addSubview:helpButton];
+
+    helpButton2 = [[UIButton alloc]initWithFrame:CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 12.3, 60, 25)];
+    [helpButton2 setBackgroundImage:help forState:UIControlStateNormal];
+    [helpButton2 addTarget:self action:@selector(help2:)
+         forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:helpButton2];
     
     [self drowButton:self.view :playButton :STAGE_CELL * 2 :STAGE_CELL * 10 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"PLAY" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(startgame:)];
     [self drowButton:self.view :anotherplayButton :STAGE_CELL * 2 :STAGE_CELL * 12 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"ANOTHER" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(anotherstartgame:)];
@@ -52,21 +61,41 @@
     logo.frame = CGRectMake(WIDTH*0.1, 150 , WIDTH*0.8, WIDTH*0.8*0.27217742);
     [self.view addSubview:logo];
 }
-
-/**
- *  音を鳴らすかどうかのボタン
- */
--(void) music :(UIButton*)button {
-    if(music) {
-        [musicButton setBackgroundImage:noneMusic forState:UIControlStateNormal];
-        [sound stopbgm];
-        ShareData.music = 0;
+-(void) help2 :(UIButton*)button {
+    [self.view bringSubviewToFront:helpButton2];
+    if(helpStatus == false) {
+        helpButton2.frame = CGRectMake((WIDTH - 300)/2, 170, 300, 138);
+        [helpButton2 setBackgroundImage:helpViewimage2 forState:UIControlStateNormal];
+        [[helpButton2 layer] setCornerRadius:10];
+        [helpButton2.layer setBorderColor:SCORE_COLOR.CGColor];
+        [helpButton2.layer setBorderWidth:5.0];
     } else {
-        [musicButton setBackgroundImage:onMusic forState:UIControlStateNormal];
-        [sound bgm];
-        ShareData.music = 1;
+        helpButton.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 10.3, 60, 25);
+        [helpButton setBackgroundImage:help forState:UIControlStateNormal];
+        [helpButton.layer setBorderWidth:0];
+        helpButton2.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 12.3, 60, 25);
+        [helpButton2 setBackgroundImage:help forState:UIControlStateNormal];
+        [helpButton2.layer setBorderWidth:0];
     }
-    music = !music;
+    helpStatus = !helpStatus;
+}
+-(void) help :(UIButton*)button {
+    [self.view bringSubviewToFront:helpButton];
+    if(helpStatus == false) {
+        helpButton.frame = CGRectMake((WIDTH - 300)/2, 80, 300, 450);
+        [helpButton setBackgroundImage:helpViewimage forState:UIControlStateNormal];
+        [[helpButton layer] setCornerRadius:10];
+        [helpButton.layer setBorderColor:SCORE_COLOR.CGColor];
+        [helpButton.layer setBorderWidth:5.0];
+    } else {
+        helpButton.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 10.3, 60, 25);
+        [helpButton setBackgroundImage:help forState:UIControlStateNormal];
+        [helpButton.layer setBorderWidth:0];
+        helpButton2.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 12.3, 60, 25);
+        [helpButton2 setBackgroundImage:help forState:UIControlStateNormal];
+        [helpButton2.layer setBorderWidth:0];
+    }
+    helpStatus = !helpStatus;
 }
 
 -(void) ranking :(UIButton*)button {
@@ -79,10 +108,12 @@
 }
 -(void) allbind {
     [playButton setEnabled:NO];
+    [anotherplayButton setEnabled:NO];
     [rankingButton setEnabled:NO];
 }
 -(void) allunbind {
     [playButton setEnabled:YES];
+    [anotherplayButton setEnabled:YES];
     [rankingButton setEnabled:YES];
 }
 

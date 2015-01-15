@@ -89,7 +89,7 @@
     tempscore = minute * 100 + second;
     scoreTitle.text = [NSString stringWithFormat:@"%02d:%02d", minute, second];
     scoreTitle.textColor = [UIColor whiteColor];
-    if(minute == 10) {
+    if(minute >= 10) {
         [mTimer invalidate];
         [self gameover];
     }
@@ -233,6 +233,7 @@
     [self drowView];
 }
 -(void)home:(UIButton*)button {
+    [sound stopbgm];
     [delegate modalViewWillClose];
 }
 

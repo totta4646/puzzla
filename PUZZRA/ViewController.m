@@ -17,8 +17,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     sound = [SoundPlay new];
-    helpViewimage = [UIImage imageNamed:@"puzzra_help.png"];
-    helpViewimage2 = [UIImage imageNamed:@"puzzra_help2.png"];
+    helpViewimage = [UIImage imageNamed:@"puzzra_help1_1.png"];
+    helpViewimage2 = [UIImage imageNamed:@"puzzra_help1_2.png"];
     help = [UIImage imageNamed:@"help.png"];
     helpStatus = false;
     
@@ -64,7 +64,7 @@
 -(void) help2 :(UIButton*)button {
     [self.view bringSubviewToFront:helpButton2];
     if(helpStatus == false) {
-        helpButton2.frame = CGRectMake((WIDTH - 300)/2, 170, 300, 138);
+        helpButton2.frame = CGRectMake((WIDTH - 300)/2, (HEIGHT - 137)/2, 300, 166);
         [helpButton2 setBackgroundImage:helpViewimage2 forState:UIControlStateNormal];
         [[helpButton2 layer] setCornerRadius:10];
         [helpButton2.layer setBorderColor:SCORE_COLOR.CGColor];
@@ -82,7 +82,7 @@
 -(void) help :(UIButton*)button {
     [self.view bringSubviewToFront:helpButton];
     if(helpStatus == false) {
-        helpButton.frame = CGRectMake((WIDTH - 300)/2, 80, 300, 450);
+        helpButton.frame = CGRectMake((WIDTH - 300)/2, (HEIGHT - 333)/2, 300, 333);
         [helpButton setBackgroundImage:helpViewimage forState:UIControlStateNormal];
         [[helpButton layer] setCornerRadius:10];
         [helpButton.layer setBorderColor:SCORE_COLOR.CGColor];

@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface Level_Balancer : NSObject {
-    int level;
+    int level,levelup,border;
 }
 -(void)levelNew;
 -(float)levelup:(float)speed;
--(BOOL)levelcheck:(int)score;
-
+-(BOOL)levelcheck;
+-(void)countUp;
 @end

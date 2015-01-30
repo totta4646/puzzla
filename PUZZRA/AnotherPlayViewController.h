@@ -34,6 +34,7 @@
     BOOL pause,bomb,timerOn,DragOn;
     id delegate;
     NSTimeInterval startTime;
+    UIActivityIndicatorView *indicator;
 }
 @property (nonatomic,retain) id delegate;
 -(void) drowview;

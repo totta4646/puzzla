@@ -13,9 +13,9 @@
 -(void) ModelNew {
     //stageBlock: 11 * 10 = 110マス
     _model = [@[] mutableCopy];
-    for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
+    for (int i = 0; i < STAGE_COL * (STAGE_ROW - 1); i++) {
         _model[i] = [NSNumber numberWithInteger:(int)arc4random_uniform(2) + 1];
-//        _model[i] = NONE_BLOCK;
+//        _model[i] = BLOCK_STARUS2;
     }
 //    _model[102] = [NSNumber numberWithInteger:1];
 //    _model[103] = [NSNumber numberWithInteger:1];
@@ -24,36 +24,37 @@
     shareData = (AppDelegate*)[[UIApplication sharedApplication] delegate];
 }
 
-//下に空きがあればつめるメソッド -> もしかしたらallmoveが軽かったらそっちで全てやるかも
--(NSMutableArray*)dropFixedBlock:(int)current {
-    NSMutableArray *temparray;
-    temparray = [@[] mutableCopy];
-    temparray[0] = [NSNumber numberWithInt:-1];
-    int temp = current%STAGE_COL+STAGE_COL*STAGE_ROW-STAGE_COL,sum,sum2;
-    for (int i = 0 ;i < STAGE_ROW;i++) {
-        sum = temp - i*STAGE_COL;
-        if(_model[sum] == NONE_BLOCK) {
-            for (int j = i + 1; j < STAGE_ROW; j++) {
-                sum2 = temp - j*STAGE_COL;
-                if(_model[sum2] != NONE_BLOCK) {
-                    _model[sum] = _model[sum2];
-                    _model[sum2] = NONE_BLOCK;
-                    temparray[0] = [NSNumber numberWithInt:sum];
-                    temparray[1] = [NSNumber numberWithInt:sum2];
-                    return temparray;
-                }
-            }
-        }
-    }
-    return temparray;
-}
+////下に空きがあればつめるメソッド -> もしかしたらallmoveが軽かったらそっちで全てやるかも
+//-(NSMutableArray*)dropFixedBlock:(int)current {
+//    NSMutableArray *temparray;
+//    temparray = [@[] mutableCopy];
+//    temparray[0] = [NSNumber numberWithInt:-1];
+//    int temp = current%STAGE_COL+STAGE_COL*(STAGE_ROW - 1)-STAGE_COL,sum,sum2;
+//    for (int i = 0 ;i < (STAGE_ROW - 1);i++) {
+//        sum = temp - i*STAGE_COL;
+//        if(_model[sum] == NONE_BLOCK) {
+//            for (int j = i + 1; j < (STAGE_ROW - 1); j++) {
+//                sum2 = temp - j*STAGE_COL;
+//                if(_model[sum2] != NONE_BLOCK) {
+//                    _model[sum] = _model[sum2];
+//                    _model[sum2] = NONE_BLOCK;
+//                    temparray[0] = [NSNumber numberWithInt:sum];
+//                    temparray[1] = [NSNumber numberWithInt:sum2];
+//                    return temparray;
+//                }
+//            }
+//        }
+//    }
+//    NSLog(@"hoge");
+//    return temparray;
+//}
 
 /**
  *  左にずらすメソッド
  */
 -(void)allLeftSlideBlock {
     BOOL emptyFlag = true;
-    for(int i = STAGE_COL * STAGE_ROW -1 ; i > STAGE_COL * (STAGE_ROW -1) -1; i--) {
+    for(int i = STAGE_COL * (STAGE_ROW - 1) -1 ; i > STAGE_COL * ((STAGE_ROW - 1) -1) -1; i--) {
         emptyFlag = true;
         for (int j = 0; j < 9; j++) {
             if(_model[i - (j * STAGE_COL)] != NONE_BLOCK) {
@@ -66,7 +67,7 @@
         if(emptyFlag) {
             int currentPosition =  i % STAGE_COL;
 //            NSLog(@"%d",currentPosition);
-            for (int l = 0; l < STAGE_ROW; l++) {
+            for (int l = 0; l < (STAGE_ROW - 1); l++) {
                 for (int k = currentPosition; k < STAGE_COL -1; k++) {
                     _model[l * STAGE_COL + k] = _model[l * STAGE_COL + k + 1];
                 }
@@ -76,6 +77,7 @@
     }
 }
 //ブロックを消す確認のメソッド
+//消すブロックのcurrent番号を返す
 -(NSMutableArray*) clearBlock:(int)first :(int)second {
     int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
     secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
@@ -119,94 +121,46 @@
     }
     return true;
 }
--(int) clearBlockSum:(int)first :(int)second {
-    int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
-    secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
-    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
-    ii,jj,count = 0;
-    NSNumber *tempNumber;
-    if (_model[first] != _model[second]) {
-        return false;
-    } else {
-        tempNumber = _model[first];
-    }
-    for (int i = 0; i <= abs(tempRow); i++) {
-        if (tempRow > 0) {
-            ii = i *(-1);
-        } else {
-            ii = i;
-        }
-        for (int j = 0; j <= abs(tempCol); j++) {
-            if (tempCol > 0) {
-                jj = j *(-1);
-            } else {
-                jj = j;
-            }
-            if(_model[first + ii * STAGE_COL + jj] == tempNumber) {
-                count++;
-            } else {
-                return 0;
-            }
-        }
-    }
-    return count;
-}
+//-(int) clearBlockSum:(int)first :(int)second {
+//    int firstCol = first%STAGE_COL,firstRow = first/STAGE_COL,
+//    secondCol = second%STAGE_COL,secondRow = second/STAGE_COL,
+//    tempCol = firstCol - secondCol,tempRow = firstRow - secondRow,
+//    ii,jj,count = 0;
+//    NSNumber *tempNumber;
+//    if (_model[first] != _model[second]) {
+//        return false;
+//    } else {
+//        tempNumber = _model[first];
+//    }
+//    for (int i = 0; i <= abs(tempRow); i++) {
+//        if (tempRow > 0) {
+//            ii = i *(-1);
+//        } else {
+//            ii = i;
+//        }
+//        for (int j = 0; j <= abs(tempCol); j++) {
+//            if (tempCol > 0) {
+//                jj = j *(-1);
+//            } else {
+//                jj = j;
+//            }
+//            if(_model[first + ii * STAGE_COL + jj] == tempNumber) {
+//                count++;
+//            } else {
+//                return 0;
+//            }
+//        }
+//    }
+//    NSLog(@"%d:fjiasdgfiosa:",count);
+//    return count;
+//}
 -(BOOL)stageEmpty {
-    for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
+    for (int i = 0; i < STAGE_COL * (STAGE_ROW - 1); i++) {
         if(_model[i] != NONE_BLOCK) {
             return false;
         }
     }
     return true;
-}
--(NSMutableArray*) bombCurrent: (int) current {
-    NSMutableArray * tempNumber = [@[] mutableCopy];
-    if(current%STAGE_COL == STAGE_COL - 1 &&
-       current/STAGE_COL == STAGE_ROW - 1) {
-        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
-        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
-        tempNumber[2] = [NSNumber numberWithInt:current - 1];
-        tempNumber[3] = [NSNumber numberWithInt:current];
-    } else if(current%STAGE_COL == 0 &&
-              current/STAGE_COL == STAGE_ROW - 1) {
-        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL];
-        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL + 1];
-        tempNumber[2] = [NSNumber numberWithInt:current];
-        tempNumber[3] = [NSNumber numberWithInt:current + 1];
-    } else if(current%STAGE_COL == 0) {
-        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL];
-        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL + 1];
-        tempNumber[2] = [NSNumber numberWithInt:current];
-        tempNumber[3] = [NSNumber numberWithInt:current + 1];
-        tempNumber[4] = [NSNumber numberWithInt:current + STAGE_COL];
-        tempNumber[5] = [NSNumber numberWithInt:current + STAGE_COL + 1];
-        
-    } else if(current%STAGE_COL == STAGE_COL - 1) {
-        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
-        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
-        tempNumber[2] = [NSNumber numberWithInt:current - 1];
-        tempNumber[3] = [NSNumber numberWithInt:current];
-        tempNumber[4] = [NSNumber numberWithInt:current + STAGE_COL - 1];
-        tempNumber[5] = [NSNumber numberWithInt:current + STAGE_COL];
-    } else if(current/STAGE_COL == STAGE_ROW - 1) {
-        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
-        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
-        tempNumber[2] = [NSNumber numberWithInt:current - STAGE_COL + 1];
-        tempNumber[3] = [NSNumber numberWithInt:current - 1];
-        tempNumber[4] = [NSNumber numberWithInt:current];
-        tempNumber[5] = [NSNumber numberWithInt:current + 1];
-    } else {
-        tempNumber[0] = [NSNumber numberWithInt:current - STAGE_COL - 1];
-        tempNumber[1] = [NSNumber numberWithInt:current - STAGE_COL];
-        tempNumber[2] = [NSNumber numberWithInt:current - STAGE_COL + 1];
-        tempNumber[3] = [NSNumber numberWithInt:current - 1];
-        tempNumber[4] = [NSNumber numberWithInt:current];
-        tempNumber[5] = [NSNumber numberWithInt:current + 1];
-        tempNumber[6] = [NSNumber numberWithInt:current + STAGE_COL - 1];
-        tempNumber[7] = [NSNumber numberWithInt:current + STAGE_COL];
-        tempNumber[8] = [NSNumber numberWithInt:current + STAGE_COL + 1];
-    }
-    return tempNumber;
 }
 
 //アニメーション用のメソッド
@@ -214,7 +168,7 @@
     int count = 0;
     NSMutableArray *tempArray;
     tempArray = [@[] mutableCopy];
-    for(int i = STAGE_COL * STAGE_ROW -1 ; i >  STAGE_COL * STAGE_ROW - (STAGE_COL + 1); i--) {
+    for(int i = STAGE_COL * (STAGE_ROW - 1) -1 ; i >  STAGE_COL * (STAGE_ROW - 1) - (STAGE_COL + 1); i--) {
         if(_model[i] == NONE_BLOCK) {
             for (int j = 0; 0 < i - STAGE_COL * j; j++) {
                 if(_model[i-STAGE_COL*j] != NONE_BLOCK) {
@@ -228,13 +182,15 @@
         }
     }
     [self alldown];
+//    NSLog(@"%@",tempArray);
     return tempArray;
 }
 
 //全部のブロックを移動させる
 -(void) alldown {
     for (int j = 0; j < 9; j++) {
-        for(int i = STAGE_COL * STAGE_ROW -1 ; i > STAGE_COL; i--) {
+//        for(int i = STAGE_COL * (STAGE_ROW - 1) -1 ; i > STAGE_COL; i--) {
+        for(int i = STAGE_COL * (STAGE_ROW - 1) -1 ; i > STAGE_COL - 1; i--) {
             if(_model[i] == NONE_BLOCK) {
                 _model[i] = _model[i - STAGE_COL];
                 _model[i - STAGE_COL] = NONE_BLOCK;
@@ -248,14 +204,18 @@
     for (int i = 0; i < count; i++) {
         _model[[deleteArray[i] intValue]] = NONE_BLOCK;
     }
-    [self allmove];
+//    [self allmove];
+    [self alldown];
 }
 -(BOOL) gameover {
-    for (int i = 0; i < STAGE_COL * STAGE_ROW; i++) {
+    for (int i = 0; i < STAGE_COL * (STAGE_ROW - 1); i++) {
         if(_model[i] != NONE_BLOCK) {
+//            NSLog(@"ステージモデルの番号:%d",i);
+//            NSLog(@"入っている情報:%@",_model[i]);
             return false;
         }
     }
+//    NSLog(@"ゲームオーバーと返す");
     return true;
 }
 @end

@@ -17,6 +17,7 @@
 -(BOOL) signUp {
     __block BOOL success = true;
     __block BOOL api = false;
+    timeout = false;
     [LobiAPI signupWithBaseName:@"player"
                      completion:^(LobiNetworkResponse *res){
                          if (res.error) {
@@ -24,8 +25,12 @@
                          }
                          api = true;
                      }];
+    [self setTimeOut];
     while (!api) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
+        if(timeout) {
+            return false;
+        }
     }
     return success;
 }
@@ -37,14 +42,26 @@
  *  @return 成功したか
  */
 -(BOOL) sendScore:(int)score {
+    __block BOOL success = true;
+    __block BOOL api = false;
+    timeout = false;
     [LobiAPI sendRanking:@"puzzra_hiscore_141219"
                    score:score
                  handler:^(LobiNetworkResponse *res) {
                      if (res.error) {
-                         return;
+                         success = false;
                      }
+                     api = true;
                  }];
-    return true;
+    [self setTimeOut];
+    while (!api) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
+        if(timeout) {
+            return false;
+        }
+    }
+//    NSLog(@"%d",success);
+    return success;
 }
 /**
  *  プレイ後に最大連鎖数を送信する
@@ -54,36 +71,12 @@
  *  @return 成功したかどうか
  */
 -(BOOL) sendMaxChainScore:(int)score {
+    __block BOOL success = true;
+    __block BOOL api = false;
+    timeout = false;
     [LobiAPI sendRanking:@"puzzra_maxchain_141219"
                    score:score
                  handler:^(LobiNetworkResponse *res) {
-                     if (res.error) {
-                         return;
-                     }
-                 }];
-    return true;
-}
--(BOOL) sendMaxScore:(int)score {
-    [LobiAPI sendRanking:@"puzzra_maxscore_141219"
-                   score:score
-                 handler:^(LobiNetworkResponse *res) {
-                     if (res.error) {
-                         return;
-                     }
-                 }];
-    return true;
-}
-
-/**
- *  名前の変更
- *
- *  @param newname 変更する名前
- */
--(BOOL) rename:(NSString*)newname {
-    __block BOOL success = true;
-    __block BOOL api = false;
-    [LobiAPI updateUserName:newname
-                 completion:^(LobiNetworkResponse *res){
                      if (res.error) {
                          success = false;
                      }
@@ -91,6 +84,62 @@
                  }];
     while (!api) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
+        if(timeout) {
+            return false;
+        }
+    }
+    return success;
+}
+-(BOOL) sendMaxScore:(int)score {
+    __block BOOL success = true;
+    __block BOOL api = false;
+    timeout = false;
+    [LobiAPI sendRanking:@"puzzra_anotherscore_141219"
+                   score:score
+                 handler:^(LobiNetworkResponse *res) {
+                     if (res.error) {
+                         success = false;
+                     }
+                     api = true;
+                 }];
+    [self setTimeOut];
+    while (!api) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
+        if(timeout) {
+            return false;
+        }
+    }
+    return success;
+}
+
+/**
+ *  名前の変更
+ *
+ *  @param newname 変更する名前
+ */
+-(int) rename:(NSString*)newname {
+    if([newname length] > 6) {
+        return 4;
+    }
+    __block int success = 0;
+    __block BOOL api = false;
+    timeout = false;
+    [LobiAPI updateUserName:newname
+                 completion:^(LobiNetworkResponse *res){
+                     if (res.error) {
+                         success = 1;
+                         if(400 == res.error.code) {
+                             success = 2;
+                         }
+                     }
+                     api = true;
+                 }];
+    [self setTimeOut];
+    while (!api) {
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
+        if(timeout) {
+            return false;
+        }
     }
     return success;
 }
@@ -114,6 +163,7 @@
     __block BOOL api = false;
     timeout = false;
     tempData = nil;
+    timeout = false;
     [LobiAPI signupWithBaseName:@"player"
                      completion:^(LobiNetworkResponse *res){
                          if (res.error) {
@@ -122,7 +172,7 @@
                          tempData = res;
                          api = true;
                      }];
-    [self setTimeOut];
+    [self setTimeOut2];
     while (!api) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
         if(timeout) {
@@ -134,6 +184,25 @@
     UIImage *image = [[UIImage alloc] initWithData:dt];
     return image;
 }
+
+-(void) setTimeOut {
+    apiTimeOut = [NSTimer scheduledTimerWithTimeInterval:5
+                                                  target:self
+                                                selector:@selector(stopApiLoading)
+                                                userInfo:nil
+                                                 repeats:NO];
+}
+-(void) setTimeOut2 {
+    apiTimeOut = [NSTimer scheduledTimerWithTimeInterval:20
+                                                  target:self
+                                                selector:@selector(stopApiLoading)
+                                                userInfo:nil
+                                                 repeats:NO];
+}
+-(void) stopApiLoading {
+    timeout = true;
+}
+
 /**
  *  ランキングデータの取得
  *
@@ -154,7 +223,7 @@
                     tempData = res;
                     api = true;
                 }];
-    [self setTimeOut];
+    [self setTimeOut2];
     while (!api) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
         if(timeout) {
@@ -164,16 +233,6 @@
     return tempData;
 }
 
--(void) setTimeOut {
-    apiTimeOut = [NSTimer scheduledTimerWithTimeInterval:5
-                                                  target:self
-                                                selector:@selector(stopApiLoading)
-                                                userInfo:nil
-                                                 repeats:NO];
-}
--(void) stopApiLoading {
-    timeout = true;
-}
 /**
  *  ランキングデータの取得
  *
@@ -181,6 +240,7 @@
  */
 -(LobiNetworkResponse*)maxchaindata {
     __block BOOL api = false;
+    timeout = false;
     [LobiAPI getRanking:@"puzzra_maxchain_141219"
                    type:KLRRankingRangeAll
                  origin:KLRRankingCursorOriginTop
@@ -193,7 +253,7 @@
                     tempData = res;
                     api = true;
                 }];
-    [self setTimeOut];
+    [self setTimeOut2];
     while (!api) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
         if(timeout) {
@@ -210,7 +270,7 @@
 -(LobiNetworkResponse*)maxscoredata {
     __block BOOL api = false;
     timeout = false;
-    [LobiAPI getRanking:@"puzzra_maxscore_141219"
+    [LobiAPI getRanking:@"puzzra_anotherscore_141219"
                    type:KLRRankingRangeAll
                  origin:KLRRankingCursorOriginTop
                  cursor:1
@@ -222,7 +282,7 @@
                     tempData = res;
                     api = true;
                 }];
-    [self setTimeOut];
+    [self setTimeOut2];
     while (!api) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5f]];
         if(timeout) {

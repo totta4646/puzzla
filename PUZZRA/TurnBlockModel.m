@@ -23,7 +23,6 @@
 //ランダムでアイテムを入れる
 -(void)randomItem {
     int randomItemNumber = (int)arc4random_uniform(2);
-    NSLog(@"%d",randomItemNumber);
     if(randomItemNumber == 0) {
         randomItemNumber = (int)arc4random_uniform(3);
         if(randomItemNumber == 0) {

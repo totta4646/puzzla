@@ -5,8 +5,8 @@
 //  Created by totta on 2014/12/23.
 //  Copyright (c) 2014年 totta. All rights reserved.
 //
-#define LEVELUP 1000
-#define DEFFICULT 0.01
+#define LEVELUP 5
+#define DEFFICULT 0.05
 
 
 #import "Level Balancer.h"
@@ -17,7 +17,8 @@
  レベル関係の初期化
  */
 -(void)levelNew {
-    level = 0;
+    level = 1;
+    border = LEVELUP;
 }
 
 /**
@@ -27,10 +28,11 @@
  *
  *  @return 変更するかどうか
  */
--(BOOL)levelcheck:(int)score {
-
-    if(score/LEVELUP >= level) {
-        level++;
+-(BOOL)levelcheck {
+    if(level >= border) {
+        NSLog(@"レベルアップ");
+        level = 1;
+        border += LEVELUP;
         return true;
     }
     return false;
@@ -44,8 +46,16 @@
  */
 
 -(float)levelup:(float)speed {
-    NSLog(@"%f",speed);
+//    NSLog(@"レベルアップ");
     speed = speed - DEFFICULT;
+    if(speed < 0.2) {
+        speed = 0.2;
+    }
     return speed;
+}
+
+-(void)countUp {
+    NSLog(@"%d",level);
+    level++;
 }
 @end

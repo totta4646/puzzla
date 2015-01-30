@@ -17,7 +17,7 @@
     BOOL timeout;
 }
 -(BOOL) signUp;
--(BOOL) rename:(NSString*)newname;
+-(int) rename:(NSString*)newname;
 -(BOOL) sendScore:(int)score;
 -(BOOL) sendMaxChainScore:(int)score;
 -(BOOL) sendMaxScore:(int)score;

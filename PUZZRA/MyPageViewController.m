@@ -82,9 +82,9 @@
     [myPage addSubview:userImage];
     
     
-    userName = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH/2,HEIGHT/5 -STAGE_CELL * 1.5, WIDTH/2, STAGE_CELL*2)];
+    userName = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH/2 - STAGE_CELL,HEIGHT/5 -STAGE_CELL * 1.5, WIDTH/2 + STAGE_CELL, STAGE_CELL*2)];
     [userName setTitle:[api getuserName] forState:UIControlStateNormal];
-
+    
     userName.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:30];
     [userName addTarget:self action:@selector(changeUserName:)
         forControlEvents:UIControlEventTouchDown];
@@ -339,6 +339,22 @@
     [alert addButtonWithTitle:@"OK"];
     [alert show];
 }
+-(void) errorAlert3 {
+    alertStatus = 2;
+    alert.title = @"ユーザー名が被っています";
+    alert.message = @"異なるユーザー名にしてください";
+    alert.delegate = self;
+    [alert addButtonWithTitle:@"OK"];
+    [alert show];
+}
+-(void) errorAlert4 {
+    alertStatus = 2;
+    alert.title = @"ユーザー名が長過ぎます";
+    alert.message = @"ユーザー名を6文字以下にしてください";
+    alert.delegate = self;
+    [alert addButtonWithTitle:@"OK"];
+    [alert show];
+}
 -(void) nameView{
     alertStatus = 0;
     nameAlert.title = @"Your New Name";
@@ -351,8 +367,12 @@
 -(void)alertView:(UIAlertView*)alertView
 clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1 && alertStatus == 0) {
-        if(![api rename:[[alertView textFieldAtIndex:0] text]]) {
+        if([api rename:[[alertView textFieldAtIndex:0] text]] == 2) {
+            [self errorAlert3];
+        } else if ([api rename:[[alertView textFieldAtIndex:0] text]] == 1) {
             [self errorAlert2];
+        } else if ([api rename:[[alertView textFieldAtIndex:0] text]] == 4) {
+            [self errorAlert4];
         } else {
             [userName setTitle:[[alertView textFieldAtIndex:0] text] forState:UIControlStateNormal];
         }

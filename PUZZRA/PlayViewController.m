@@ -18,6 +18,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     //model初期化
+    alert = [UIAlertView new];
+    
+//    alert =[[UIAlertView alloc]initWithTitle:@"通信エラー"
+//                                                  message:@"スコアの送信に失敗しました。"
+//                                                 delegate:self
+//                                        cancelButtonTitle:@"Cancel"
+//                                        otherButtonTitles:@"ReTry", nil];
     gameOver = true;
     turnMode = false;
     DragOn = false;
@@ -31,10 +38,17 @@
     sound = [[SoundPlay alloc]init];
     [sound bgm3];
     downButton = [[UIButton alloc]init];
-    UILongPressGestureRecognizer *gestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedHandler:)];
-    [downButton addGestureRecognizer:gestureRecognizer];
     leftButton = [[UIButton alloc]init];
     rightButton = [[UIButton alloc]init];
+    UILongPressGestureRecognizer *gestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedHandler:)];
+    [downButton addGestureRecognizer:gestureRecognizer];
+
+    UILongPressGestureRecognizer *gestureRecognizerLeft = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedHandlerleft:)];
+    [leftButton addGestureRecognizer:gestureRecognizerLeft];
+    
+    UILongPressGestureRecognizer *gestureRecognizerRight = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedHandlerright:)];
+    [rightButton addGestureRecognizer:gestureRecognizerRight];
+
     turnButton = [[UIButton alloc]init];
     pauseButton = [[UIButton alloc]init];
     pauseButton.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
@@ -56,6 +70,14 @@
     [level levelNew];
     score = [[MyScore alloc]init];
     [score scoreNew];
+    indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    float w = indicator.frame.size.width;
+    float h = indicator.frame.size.height;
+    float x = self.view.frame.size.width/2 - w/2;
+    float y = self.view.frame.size.height/2 - h/2;
+    indicator.frame = CGRectMake(x, y, w, h);
+    indicator.color = [UIColor blackColor];
+    // 現在のサブビューとして登録する
     
     //パズルをするViewの描写
     gameView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_HEIGHT)];
@@ -88,6 +110,7 @@
     [gameView addGestureRecognizer:panGesture];
     [blockModel randomBlock];
     [self drowTurnBlock];
+    [self timerStart];
 }
 
 /**
@@ -171,7 +194,6 @@
             clearCount++;
             
             int ChainSum = [score countMaxChain];
-            
             [score addScore:tempScore];
             [score checkMaxScore:tempScore];
             [self scoreEffect:firstNum:secondNum:ChainSum];
@@ -183,6 +205,7 @@
             [stageModel deleteBlock:[stageModel clearBlock:firstNum :secondNum]];
             [sound clearBlock];
 
+            [level countUp];
             return;
         }
         if ([dragPointer isValid]) {
@@ -196,8 +219,6 @@
     }
 }
 -(void) resetDrag {
-//    [self drowView];
-//    [self drowTurnBlock];
     [self returndrowDragPoint:tempDragPoint];
 }
 -(void) timerStart{
@@ -239,7 +260,6 @@
     [rightButton setEnabled:YES];
     [leftButton setEnabled:YES];
     [turnButton setEnabled:YES];
-    [turnButtonReverce setEnabled:YES];
     pause = false;
 }
 //ボタン操作
@@ -275,10 +295,12 @@
     [self reDrowScore:0];
     [stageModel ModelNew];
     [blockModel ModelNew];
+    [score scoreNew];
     [self drowView];
     [blockModel randomBlock];
     [self drowTurnBlock];
     
+    gameOver = !gameOver;
     shareData.row = 0;
     shareData.col = 4;
     [self timerStart];
@@ -351,6 +373,38 @@
             break;
     }
 }
+-(void)longPressedHandlerright:(UILongPressGestureRecognizer *)gestureRecognizer {
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            longtap = [NSTimer scheduledTimerWithTimeInterval:0.05
+                                                       target:self
+                                                     selector:@selector(right:)
+                                                     userInfo:nil
+                                                      repeats:YES];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [longtap invalidate];
+            break;
+        default:
+            break;
+    }
+}
+-(void)longPressedHandlerleft:(UILongPressGestureRecognizer *)gestureRecognizer {
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            longtap = [NSTimer scheduledTimerWithTimeInterval:0.05
+                                                       target:self
+                                                     selector:@selector(left:)
+                                                     userInfo:nil
+                                                      repeats:YES];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [longtap invalidate];
+            break;
+        default:
+            break;
+    }
+}
 
 
 //描写されているものを消すメソッド
@@ -373,6 +427,7 @@
 
 //ボタンを描写するメソッド
 - (void) drowButton :(UIView*)addView:(UIButton*)drowButton:(float)widthPoint:(float)heightPoint:(float)width:(float)height:(UIColor*)backGroundColor:(UIColor*)textColor:(NSString*)title:(UIColor*)borderColor:(float)borderWidth:(SEL)selector {
+    
     [drowButton setTitle:title forState:UIControlStateNormal];
     drowButton.frame = CGRectMake(widthPoint, heightPoint, width, height);
     [drowButton addTarget:self action:selector
@@ -381,6 +436,7 @@
     [drowButton.layer setBorderWidth:borderWidth];
     [drowButton.layer setBorderColor:borderColor.CGColor];
     [addView addSubview:drowButton];
+
 }
 
 //操作するBlockの描写
@@ -488,8 +544,21 @@
     pauseView.frame = CGRectMake(0, 0, WIDTH, HEIGHT);
     pauseView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
     [self.view addSubview:pauseView];
-    [api sendScore:[score getScore]];
-    [api sendMaxChainScore:[score getMaxChainScore]];
+    [self.view addSubview:indicator];
+    [indicator startAnimating];
+//    NSLog(@"終わったよー");
+    if(![api sendScore:[score getScore]]) {
+        [indicator stopAnimating];
+        [self alertOffline];
+    }
+    if([alert isVisible] == 0 &&
+       ![api sendMaxChainScore:[score getMaxChainScore]]) {
+        [indicator stopAnimating];
+        [self alertOffline];
+    }
+    [indicator stopAnimating];
+//    [api sendScore:[score getScore]];
+//    [api sendMaxChainScore:[score getMaxChainScore]];
     UILabel *currentScore = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL*3, WIDTH, STAGE_CELL*6)];
     NSString *tempScore = [NSString stringWithFormat:@"%d",[score getScore]];
     currentScore.text = [@"SCORE:" stringByAppendingString:tempScore];
@@ -500,6 +569,7 @@
     [pauseView addSubview:currentScore];
     [self drowButton:pauseView :resetButton :STAGE_CELL * 2 :STAGE_CELL * 8 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RESET" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(reset:)];
     [self drowButton:pauseView :homeButton :STAGE_CELL * 2 :STAGE_CELL * 10 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"HOME" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(home:)];
+    [indicator stopAnimating];
 }
 
 
@@ -588,7 +658,7 @@
 }
 
 -(void) reDrowScore:(int)addPoint {
-    if([level levelcheck:addPoint]) {
+    if([level levelcheck]) {
         [autoDown invalidate];
         speed = [level levelup:speed];
         if(!timerOn) {
@@ -602,6 +672,10 @@
 
 
 -(void)gameover{
+    if (!gameOver) {
+//        NSLog(@"止めたよー！！");
+        return;
+    }
     [autoDown invalidate];
     [self allBind];
     gameOver = false;
@@ -774,6 +848,26 @@
             }
         }
     }
+}
+-(void)alertView:(UIAlertView*)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+//        [indicator startAnimating];
+//        if(![api sendScore:[score getScore]]) {
+//            [self alertOffline];
+//        } else if(![api sendMaxChainScore:[score getMaxChainScore]]) {
+//            [self alertOffline];
+//        }
+//        [indicator stopAnimating];
+    }
+}
+
+-(void) alertOffline {
+    alert.title = @"通信エラー";
+    alert.delegate = self;
+    [alert addButtonWithTitle:@"cancel"];
+    [alert addButtonWithTitle:@"OK"];
+    [alert show];
 }
 
 - (void)applicationDidEnterBackground {

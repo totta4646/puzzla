@@ -27,7 +27,6 @@
 		179ACDCF1A4420B500F6E51F /* PUZZRA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 179ACDCD1A4420B500F6E51F /* PUZZRA.xcdatamodeld */; };
 		179ACDD21A4420B500F6E51F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 179ACDD11A4420B500F6E51F /* ViewController.m */; };
 		179ACDD51A4420B500F6E51F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 179ACDD31A4420B500F6E51F /* Main.storyboard */; };
-		179ACDD71A4420B500F6E51F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 179ACDD61A4420B500F6E51F /* Images.xcassets */; };
 		179ACDDA1A4420B500F6E51F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 179ACDD81A4420B500F6E51F /* LaunchScreen.xib */; };
 		179ACDE61A4420B500F6E51F /* PUZZRATests.m in Sources */ = {isa = PBXBuildFile; fileRef = 179ACDE51A4420B500F6E51F /* PUZZRATests.m */; };
 		179ACDF91A44215600F6E51F /* Const.m in Sources */ = {isa = PBXBuildFile; fileRef = 179ACDF41A44215600F6E51F /* Const.m */; };
@@ -112,6 +111,12 @@
 		1744D3EF1A53C318008CE688 /* AnotherPlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherPlayViewController.m; sourceTree = "<group>"; };
 		1744D3F11A53C32E008CE688 /* AnotherStageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnotherStageModel.h; sourceTree = "<group>"; };
 		1744D3F21A53C32E008CE688 /* AnotherStageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnotherStageModel.m; sourceTree = "<group>"; };
+		1770BFFD1A7DCEE100852D08 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
+		1770BFFE1A7DCEE100852D08 /* test-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "test-1.png"; sourceTree = "<group>"; };
+		1770BFFF1A7DCEE100852D08 /* test-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "test-2.png"; sourceTree = "<group>"; };
+		1770C0001A7DCEE100852D08 /* test-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "test-3.png"; sourceTree = "<group>"; };
+		1770C0011A7DCEE100852D08 /* test-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "test-4.png"; sourceTree = "<group>"; };
+		1770C0021A7DCEE100852D08 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test.png; sourceTree = "<group>"; };
 		1781D0DF1A519EF000152BE5 /* MyPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPageViewController.h; sourceTree = "<group>"; };
 		1781D0E01A519EF000152BE5 /* MyPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPageViewController.m; sourceTree = "<group>"; };
 		178F10B21A697B7100F572DB /* puzzra_help1_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = puzzra_help1_1.png; sourceTree = "<group>"; };
@@ -246,9 +251,24 @@
 			name = AnotherPlauMode;
 			sourceTree = "<group>";
 		};
+		1770BFFC1A7DCEE100852D08 /* LaunchImage.launchimage */ = {
+			isa = PBXGroup;
+			children = (
+				1770BFFD1A7DCEE100852D08 /* Contents.json */,
+				1770BFFE1A7DCEE100852D08 /* test-1.png */,
+				1770BFFF1A7DCEE100852D08 /* test-2.png */,
+				1770C0001A7DCEE100852D08 /* test-3.png */,
+				1770C0011A7DCEE100852D08 /* test-4.png */,
+				1770C0021A7DCEE100852D08 /* test.png */,
+			);
+			name = LaunchImage.launchimage;
+			path = PUZZRA/Images.xcassets/LaunchImage.launchimage;
+			sourceTree = "<group>";
+		};
 		179ACDBA1A4420B500F6E51F = {
 			isa = PBXGroup;
 			children = (
+				1770BFFC1A7DCEE100852D08 /* LaunchImage.launchimage */,
 				179ACDC51A4420B500F6E51F /* PUZZRA */,
 				179ACDE21A4420B500F6E51F /* PUZZRATests */,
 				179ACDC41A4420B500F6E51F /* Products */,
@@ -572,7 +592,6 @@
 				17B2D1711A72135E00F1AFF0 /* Icon-Small@3x.png in Resources */,
 				173DA38C1A62E7640015A5DE /* modern_room_#214.mp3 in Resources */,
 				17B2D1731A72135E00F1AFF0 /* Icon-72.png in Resources */,
-				179ACDD71A4420B500F6E51F /* Images.xcassets in Resources */,
 				17FF81D81A68356B00CC2F33 /* bomb.png in Resources */,
 				178F10B51A697D3000F572DB /* puzzra_help1_2.png in Resources */,
 				17FF81D01A682BBA00CC2F33 /* help.png in Resources */,

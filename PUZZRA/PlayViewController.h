@@ -17,6 +17,7 @@
 #import "LobiNetwork.h"
 #import "Level Balancer.h"
 #import "MyScore.h"
+#import <sys/sysctl.h>
 
 @interface PlayViewController : UIViewController {
     StageModel *stageModel;
@@ -27,6 +28,7 @@
     Level_Balancer *level;
     MyScore *score;
 
+    float hoge;
     UIAlertView *alert;
     UIActivityIndicatorView *indicator;
     UIView *gameView,*ButtonView,*scoreView,*pauseView;

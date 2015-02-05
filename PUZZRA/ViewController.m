@@ -5,7 +5,7 @@
 //  Created by totta on 2014/12/19.
 //  Copyright (c) 2014年 totta. All rights reserved.
 //
-#import <LobiRanking/LobiRanking.h>
+//#import <LobiRanking/LobiRanking.h>
 #import "ViewController.h"
 
 @interface ViewController ()
@@ -15,6 +15,7 @@
 @implementation ViewController
 
 - (void)viewDidLoad {
+//    NSLog(@"%f",STAGE_CELL);
     [super viewDidLoad];
     sound = [SoundPlay new];
     helpViewimage = [UIImage imageNamed:@"puzzra_help1_1.png"];
@@ -31,21 +32,21 @@
     playButton = [UIButton new];
     anotherplayButton = [UIButton new];
     rankingButton = [UIButton new];
-    helpButton = [[UIButton alloc]initWithFrame:CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 10.3, 60, 25)];
+    helpButton = [[UIButton alloc]initWithFrame:CGRectMake(STAGE_CELL * 8.1, HEIGHT * 0.64655172413794 -(25 + HEIGHT * 0.0843328335832) /2 , 60, 25)];
     [helpButton setBackgroundImage:help forState:UIControlStateNormal];
     [helpButton addTarget:self action:@selector(help:)
         forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:helpButton];
 
-    helpButton2 = [[UIButton alloc]initWithFrame:CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 12.3, 60, 25)];
+    helpButton2 = [[UIButton alloc]initWithFrame:CGRectMake(STAGE_CELL * 8.1, HEIGHT * 0.75899550224888 - (25 + HEIGHT * 0.0843328335832) /2, 60, 25)];
     [helpButton2 setBackgroundImage:help forState:UIControlStateNormal];
     [helpButton2 addTarget:self action:@selector(help2:)
          forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:helpButton2];
     
-    [self drowButton:self.view :playButton :STAGE_CELL * 2 :STAGE_CELL * 10 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"PLAY" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(startgame:)];
-    [self drowButton:self.view :anotherplayButton :STAGE_CELL * 2 :STAGE_CELL * 12 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"ANOTHER" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(anotherstartgame:)];
-    [self drowButton:self.view :rankingButton :STAGE_CELL * 2 :STAGE_CELL * 14 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RANKING" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(ranking:)];
+    [self drowButton:self.view :playButton :STAGE_CELL * 2 :HEIGHT * 0.56221889055472 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"PLAY" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(startgame:)];
+    [self drowButton:self.view :anotherplayButton :STAGE_CELL * 2 :HEIGHT * 0.67466266866566 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"ANOTHER" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(anotherstartgame:)];
+    [self drowButton:self.view :rankingButton :STAGE_CELL * 2 :HEIGHT * 0.78710644677662 :STAGE_CELL*6 :STAGE_CELL  * 1.5:BUTTON_COLOR :BLOCK_COLOR4 :@"RANKING" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(ranking:)];
     indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     float w = indicator.frame.size.width;
     float h = indicator.frame.size.height;
@@ -58,7 +59,7 @@
 
     UIImage *image = [UIImage imageNamed:@"logo.png"];
     UIImageView *logo = [[UIImageView alloc]initWithImage:image];
-    logo.frame = CGRectMake(WIDTH*0.1, 150 , WIDTH*0.8, WIDTH*0.8*0.27217742);
+    logo.frame = CGRectMake(WIDTH*0.1, HEIGHT* 0.23988006 , WIDTH*0.8, WIDTH*0.8*0.27217742);
     [self.view addSubview:logo];
 }
 -(void) help2 :(UIButton*)button {
@@ -70,10 +71,10 @@
         [helpButton2.layer setBorderColor:SCORE_COLOR.CGColor];
         [helpButton2.layer setBorderWidth:5.0];
     } else {
-        helpButton.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 10.3, 60, 25);
+        helpButton.frame = CGRectMake(STAGE_CELL * 8.1, HEIGHT * 0.64655172413794 -(25 + HEIGHT * 0.0843328335832) /2, 60, 25);
         [helpButton setBackgroundImage:help forState:UIControlStateNormal];
         [helpButton.layer setBorderWidth:0];
-        helpButton2.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 12.3, 60, 25);
+        helpButton2.frame = CGRectMake(STAGE_CELL * 8.1, HEIGHT * 0.75899550224888 - (25 + HEIGHT * 0.0843328335832) /2, 60, 25);
         [helpButton2 setBackgroundImage:help forState:UIControlStateNormal];
         [helpButton2.layer setBorderWidth:0];
     }
@@ -88,10 +89,10 @@
         [helpButton.layer setBorderColor:SCORE_COLOR.CGColor];
         [helpButton.layer setBorderWidth:5.0];
     } else {
-        helpButton.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 10.3, 60, 25);
+        helpButton.frame = CGRectMake(STAGE_CELL * 8.1, HEIGHT * 0.64655172413794 -(25 + HEIGHT * 0.0843328335832) /2, 60, 25);
         [helpButton setBackgroundImage:help forState:UIControlStateNormal];
         [helpButton.layer setBorderWidth:0];
-        helpButton2.frame = CGRectMake(STAGE_CELL * 8.1, STAGE_CELL * 12.3, 60, 25);
+        helpButton2.frame = CGRectMake(STAGE_CELL * 8.1, HEIGHT * 0.75899550224888 - (25 + HEIGHT * 0.0843328335832) /2, 60, 25);
         [helpButton2 setBackgroundImage:help forState:UIControlStateNormal];
         [helpButton2.layer setBorderWidth:0];
     }
@@ -154,9 +155,9 @@
     [addView addSubview:drowButton];
 }
 
-- (void)presentRanking {
-    [LobiRanking presentRanking];
-}
+//- (void)presentRanking {
+//    [LobiRanking presentRanking];
+//}
 //画面が返ってきたときのメソッド
 -(void) modalViewWillClose {
     [sound bgm];

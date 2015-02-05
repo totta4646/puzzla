@@ -72,7 +72,7 @@
     }
     userImage = [[UIButton alloc]init];
     [userImage setBackgroundImage:img forState:UIControlStateNormal];
-    userImage.frame = CGRectMake(STAGE_CELL, HEIGHT/5-STAGE_CELL*1.75, STAGE_CELL*2.5, STAGE_CELL*2.5);
+    userImage.frame = CGRectMake(STAGE_CELL, HEIGHT/5-HEIGHT*0.09838830584708, STAGE_CELL*2.5, STAGE_CELL*2.5);
     [userImage addTarget:self action:@selector(changeUserImage:)
   forControlEvents:UIControlEventTouchDown];
     [[userImage layer] setBorderColor:[BLOCK_COLOR4 CGColor]];
@@ -122,7 +122,7 @@
         error = true;
         [self errorAlert];
     }
-    UILabel *scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/3, STAGE_CELL * 4.5, WIDTH/3, STAGE_CELL*2)];
+    UILabel *scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/3, HEIGHT * 0.23050974512744, WIDTH/3, STAGE_CELL*2)];
     scoreLabel.text = [[[resdata.body objectForKey:@"self_order"] objectForKey:@"rank"] stringByAppendingString:@"位"];
     scoreLabel.textColor = SCORE_COLOR;
     scoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25];
@@ -177,7 +177,7 @@
         error = true;
         [self errorAlert];
     }
-    UILabel *scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL * 4.5, WIDTH/3, STAGE_CELL*2)];
+    UILabel *scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, HEIGHT * 0.23050974512744, WIDTH/3, STAGE_CELL*2)];
     scoreLabel.text = [[[resdata.body objectForKey:@"self_order"] objectForKey:@"rank"] stringByAppendingString:@"位"];
     scoreLabel.textColor = SCORE_COLOR;
     scoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25];
@@ -234,7 +234,7 @@
         error = true;
         [self errorAlert];
     }
-    UILabel *scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/3*2, STAGE_CELL * 4.5, WIDTH/3, STAGE_CELL*2)];
+    UILabel *scoreLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH/3*2, HEIGHT * 0.23050974512744, WIDTH/3, STAGE_CELL*2)];
     scoreLabel.text = [[[resdata.body objectForKey:@"self_order"] objectForKey:@"rank"] stringByAppendingString:@"位"];
     scoreLabel.textColor = SCORE_COLOR;
     scoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25];

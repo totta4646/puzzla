@@ -17,6 +17,7 @@
 @synthesize delegate;
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     //model初期化
     alert = [UIAlertView new];
     
@@ -70,6 +71,8 @@
     [level levelNew];
     score = [[MyScore alloc]init];
     [score scoreNew];
+    
+    hoge = 100;
     indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     float w = indicator.frame.size.width;
     float h = indicator.frame.size.height;
@@ -80,30 +83,52 @@
     // 現在のサブビューとして登録する
     
     //パズルをするViewの描写
-    gameView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_HEIGHT)];
-
+    if([self devicecheck]){
+        gameView = [[UIView alloc]initWithFrame:CGRectMake(0, -STAGE_CELL, WIDTH, STAGE_HEIGHT)];
+    } else{
+        gameView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_HEIGHT)];
+        
+    }
+    NSLog(@"%f",STAGE_HEIGHT);
     [self.view addSubview:gameView];
     [self drowView];
-    scoreView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_CELL * 2)];
+    if([self devicecheck]){
+        scoreView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_CELL)];
+    } else {
+        scoreView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, STAGE_CELL * 2)];
+        
+    }
     scoreView.backgroundColor = SCORE_COLOR;
     [self.view addSubview:scoreView];
     
-    scoreTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, STAGE_CELL, WIDTH/2, STAGE_CELL)];
+    if([self devicecheck]){
+        scoreTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, WIDTH/2, STAGE_CELL)];
+    } else {
+        scoreTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, HEIGHT * 0.05622188905548, WIDTH/2, STAGE_CELL)];
+    }
     scoreTitle.textAlignment = NSTextAlignmentCenter;
     scoreTitle.textColor = [UIColor whiteColor];
     [scoreView addSubview:scoreTitle];
     [self reDrowScore:0];
-    [self drowButton:scoreView :pauseButton :WIDTH*3/4 :STAGE_CELL :WIDTH/4 : STAGE_CELL :SCORE_COLOR :BLOCK_COLOR :@"PAUSE" :SCORE_COLOR :BUTTON_BORDER_WIDHT :@selector(wait:)];
+    if([self devicecheck]) {
+        [self drowButton:scoreView :pauseButton :WIDTH*3/4 :0 :WIDTH/4 : STAGE_CELL :SCORE_COLOR :BLOCK_COLOR :@"PAUSE" :SCORE_COLOR :BUTTON_BORDER_WIDHT :@selector(wait:)];
+    } else {
+        [self drowButton:scoreView :pauseButton :WIDTH*3/4 :STAGE_CELL :WIDTH/4 : STAGE_CELL :SCORE_COLOR :BLOCK_COLOR :@"PAUSE" :SCORE_COLOR :BUTTON_BORDER_WIDHT :@selector(wait:)];
+    }
     
     
     //ボタンのViewの描写
-    ButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, STAGE_HEIGHT, WIDTH, HEIGHT-STAGE_HEIGHT)];
+    if ([self devicecheck]) {
+        ButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, STAGE_HEIGHT - STAGE_CELL, WIDTH, HEIGHT-STAGE_HEIGHT + STAGE_CELL)];
+    } else {
+        ButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, STAGE_HEIGHT, WIDTH, HEIGHT-STAGE_HEIGHT)];
+    }
     [self.view addSubview:ButtonView];
     
-    [self drowButton:ButtonView :turnButton :0 :0 :WIDTH :(HEIGHT-STAGE_HEIGHT)/3 :BUTTON_COLOR3 :BLOCK_COLOR5 :@"⇄" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(turn:)];
-    [self drowButton:ButtonView :leftButton :0 :(HEIGHT-STAGE_HEIGHT)/3 :WIDTH/2 :(HEIGHT-STAGE_HEIGHT)/3 :BUTTON_COLOR2 :BLOCK_COLOR2 :@"←" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(left:)];
-    [self drowButton:ButtonView :rightButton :WIDTH/2 :(HEIGHT-STAGE_HEIGHT)/3 :WIDTH/2 :(HEIGHT-STAGE_HEIGHT)/3 :BUTTON_COLOR2 :BLOCK_COLOR3 :@"→" :BUTTON_BORDER_COLOR :1 :@selector(right:)];
-    [self drowButton:ButtonView :downButton :0 :(HEIGHT-STAGE_HEIGHT)*2/3 :WIDTH :(HEIGHT-STAGE_HEIGHT)/3 :BUTTON_COLOR :BLOCK_COLOR4 :@"↓" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(down:)];
+    [self drowButton:ButtonView :turnButton :0 :0 :WIDTH :ButtonView.frame.size.height/3 :BUTTON_COLOR3 :BLOCK_COLOR5 :@"⇄" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(turn:)];
+    [self drowButton:ButtonView :leftButton :0 :ButtonView.frame.size.height/3 :WIDTH/2 :ButtonView.frame.size.height/3 :BUTTON_COLOR2 :BLOCK_COLOR2 :@"←" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(left:)];
+    [self drowButton:ButtonView :rightButton :WIDTH/2 :ButtonView.frame.size.height/3 :WIDTH/2 :ButtonView.frame.size.height/3 :BUTTON_COLOR2 :BLOCK_COLOR3 :@"→" :BUTTON_BORDER_COLOR :1 :@selector(right:)];
+    [self drowButton:ButtonView :downButton :0 :ButtonView.frame.size.height*2/3 :WIDTH :ButtonView.frame.size.height/3 :BUTTON_COLOR :BLOCK_COLOR4 :@"↓" :BUTTON_BORDER_COLOR :BUTTON_BORDER_WIDHT :@selector(down:)];
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]
                                           initWithTarget:self action:@selector(handlePanGesture:)];
     panGesture.maximumNumberOfTouches = 1;
@@ -868,6 +893,23 @@ clickedButtonAtIndex:(NSInteger)buttonIndex {
     [alert addButtonWithTitle:@"cancel"];
     [alert addButtonWithTitle:@"OK"];
     [alert show];
+}
+
+-(BOOL) devicecheck {
+    size_t size;
+    sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+    char *machine = malloc(size);
+    sysctlbyname("hw.machine", machine, &size, NULL, 0);
+    NSString *deviceName = [NSString stringWithCString:machine encoding:NSUTF8StringEncoding];
+    free(machine);
+    
+    if([deviceName isEqualToString:@"x86_6"] ||
+       [deviceName isEqualToString:@"iPhone4,2"] ||
+       [deviceName isEqualToString:@"iPhone4,3"]) {
+        return true;
+    }
+    
+    return false;
 }
 
 - (void)applicationDidEnterBackground {

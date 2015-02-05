@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PlayViewController.h"
 #import "AnotherPlayViewController.h"
-#import <LobiCore/LobiAPI.h>
+#import <LobiCore/LobiCore.h>
 #import <LobiRanking/LobiRanking.h>
 #import "LobiNetwork.h"
 #import "MyPageViewController.h"

@@ -183,6 +183,7 @@
     scoreLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:25];
     scoreLabel.textAlignment = NSTextAlignmentCenter;
     [myPage addSubview:scoreLabel];
+    NSLog(@"%@",resdata.body);
     
     int count = (int)[[resdata.body objectForKey:@"orders"] count];
     hiscoreranking = [[UIScrollView alloc]initWithFrame:CGRectMake(0, HEIGHT*2/5, WIDTH,HEIGHT*3/5)];
